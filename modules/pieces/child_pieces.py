@@ -17,7 +17,7 @@ class Pawn(Piece):
             self.__image = pygame.image.load("assets/chess_pieces_images/black-pawn.png")
         
         self.__rect = self.__image.get_rect()
-        self.__rect.topleft(row * size, column * size)
+        self.__rect.topleft = (row * size, column * size)
 
     #getters
     def get_has_moved(self):
