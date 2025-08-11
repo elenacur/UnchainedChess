@@ -5,9 +5,8 @@ from modules.pieces.parent_piece import Piece
 class Pawn(Piece):
 
     #constructor
-    def __init__(self, colour):
-        super().__init__("pawn", colour, False, 1, 1, 50)
-        self.set_name("pawn")
+    def __init__(self, colour, taken, row, column, size):
+        super().__init__("pawn", colour, taken, row, column, size)
         self.__has_moved = False
         self.__en_passant = False
         self.__can_promote = False
@@ -16,6 +15,9 @@ class Pawn(Piece):
             self.__image = pygame.image.load("assets/chess_pieces_images/white-pawn.png")
         else:
             self.__image = pygame.image.load("assets/chess_pieces_images/black-pawn.png")
+        
+        self.__rect = self.__image.get_rect()
+        self.__rect.topleft(row * size, column * size)
 
     #getters
     def get_has_moved(self):
@@ -45,7 +47,7 @@ class Pawn(Piece):
         None
 
     def draw(self, screen):
-        screen.blit(self.__image, (0,0))
+        screen.blit(self.__image, self.__rect)
 
 #king
 class King(Piece):

@@ -10,7 +10,8 @@ class Piece():
         self.__row = row
         self.__column = column
         self.__size = size
-        self.__image = ""
+        self.__image = None
+        self.__rect = None
 
     #getters
     def get_name(self):

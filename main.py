@@ -11,7 +11,7 @@ SCREEN_HEIGHT = 765
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 board = Board()
-pawn = Pawn("white")
+pawn = Pawn("white", False, 1, 1, 50)
 
 run = True
 while run == True: #game loop
