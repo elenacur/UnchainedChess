@@ -1,5 +1,5 @@
 import pygame
-from modules.pieces.parent_piece import Piece
+from modules.chess_board.pieces.parent_piece import Piece
 
 #pawn
 class Pawn(Piece):

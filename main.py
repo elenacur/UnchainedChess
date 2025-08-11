@@ -1,6 +1,6 @@
 import pygame
-from modules.board import Board
-from modules.pieces.child_pieces import Pawn
+from modules.chess_board.board import Board
+from modules.chess_board.pieces.child_pieces import Pawn
 
 pygame.init()
 
@@ -10,7 +10,7 @@ SCREEN_HEIGHT = 765
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-board = Board()
+board = Board("", True, 0, False)
 pawn = Pawn("white", False, 1, 1, 50)
 
 run = True

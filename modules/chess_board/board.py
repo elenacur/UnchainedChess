@@ -1,18 +1,29 @@
 import pygame
-from modules.square import Square
+from modules.chess_board.square import Square
 
 class Board():
 
     #constructor
-    def __init__(self):
+    def __init__(self, fen, whites_turn, num_of_moves, game_over):
         self.__board = [["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
-         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
-         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]]
-        self.__fen = ""
-        self.__whites_turn = True
-        self.__num_of_moves = 0
-        self.__game_over = False
-        self.__white_square = pygame.Rect(100, 100, 200, 200)
+                        ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
+                        ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
+                        ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]] #2D array of sqauares
+        self.__fen = fen
+        self.__whites_turn = whites_turn
+        self.__num_of_moves = num_of_moves
+        self.__game_over = game_over
+
+        white = True
+        for i in range(0, 8):
+            for j in range(0, 8):
+                if white:
+                    colour = "white"
+                else:
+                    colour = "black"
+                if j != 7:
+                    colour = not colour
+                self.__board[i][j] = Square(i, j, 75, colour)
 
     #getters
     def get_board(self):
@@ -54,19 +65,9 @@ class Board():
          ["r", "n", "b", "q", "k", "b", "n", "r"]]
         
     def draw(self, screen):
-        white = True
-        for i in range(1, 9):
-            for j in range(1, 9):
-                if white:
-                    colour = "white"
-                    if j != 8:
-                        white = False
-                else:
-                    colour = "black"
-                    if j != 8:
-                        white = True
-                square = Square(i, j, 75, colour)
-                square.draw(screen)
+        for i in self.__board:
+            for j in i:
+                j.draw(screen)
 
 
     
