@@ -22,7 +22,7 @@ class Board():
                 else:
                     colour = "black"
                 if j != 7:
-                    colour = not colour
+                    white = not white
                 self.__board[i][j] = Square(i, j, 75, colour)
 
     #getters
