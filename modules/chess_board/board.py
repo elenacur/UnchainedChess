@@ -1,3 +1,4 @@
+#imports
 import pygame
 from modules.chess_board.square import Square
 
@@ -14,6 +15,7 @@ class Board():
         self.__num_of_moves = num_of_moves
         self.__game_over = game_over
 
+        #putting Square objects in the board array, alternating black and white
         white = True
         for i in range(0, 8):
             for j in range(0, 8):
@@ -21,7 +23,7 @@ class Board():
                     colour = "white"
                 else:
                     colour = "black"
-                if j != 7:
+                if j != 7: #start of new row is same colour as end of previous row so colour should not change
                     white = not white
                 self.__board[i][j] = Square(i, j, 75, colour)
 
@@ -59,15 +61,12 @@ class Board():
 
     #other methods
     def reset_board(self):
-        self.__board = [["R", "N", "B", "Q", "K", "B", "N", "R"], ["P", "P", "P", "P", "P", "P", "P", "P"], 
-         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
-         ["", "", "", "", "", "", "", ""], ["p", "p", "p", "p", "p", "p", "p", "p"], 
-         ["r", "n", "b", "q", "k", "b", "n", "r"]]
-        
-    def draw(self, screen):
+        None
+    
+    def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
         for i in self.__board:
             for j in i:
-                j.draw(screen)
+                j.draw_square(screen)
 
 
     

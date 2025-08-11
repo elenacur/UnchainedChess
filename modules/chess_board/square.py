@@ -1,6 +1,9 @@
+#imports
 import pygame
 
 class Square:
+
+    #constructor
     def __init__(self, row, column, size, colour):
         self.__row = row
         self.__column = column
@@ -8,7 +11,7 @@ class Square:
         self.__colour = colour
         self.__piece = None
         self.__highlight = False
-        self.__rect = pygame.Rect(column * size, row * size, size, size)
+        self.__rect = pygame.Rect(column * size, row * size, size, size) #square without colour
 
     #getters
     def get_row(self):
@@ -43,5 +46,5 @@ class Square:
         self.__highlight = p_highlight
 
     #other methods
-    def draw(self, screen):
+    def draw_square(self, screen): #draws one square
         pygame.draw.rect(screen, self.__colour, self.__rect)
