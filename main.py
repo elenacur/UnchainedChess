@@ -6,14 +6,15 @@ from modules.chess_board.pieces.child_pieces import Pawn
 pygame.init()
 
 #window and sizing
-SCREEN_WIDTH = 1360
-SCREEN_HEIGHT = 765
+SCREEN_WIDTH = 1344
+SCREEN_HEIGHT = 756
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #instantiating objects
 board = Board("", True, 0, False)
-pawn = Pawn("white", False, 1, 1, 50)
+pawn1 = Pawn("white", False, 1, 1, 20)
+pawn2 = Pawn("black", False, 1, 1, 40)
 
 run = True
 while run == True: #game loop
@@ -22,12 +23,14 @@ while run == True: #game loop
   pos = pygame.mouse.get_pos() #getting position of the mouse
 
   board.draw_whole_board(screen)
-  pawn.draw(screen)
+  pawn1.draw(screen)
+  pawn2.draw(screen)
 
   #event handler
   for event in pygame.event.get():
 
-    pawn.move(event, pos) #move piece when user drags and drops it
+    pawn1.move(event, pos) #move piece when user drags and drops it
+    pawn2.move(event, pos)
 
     if event.type == pygame.QUIT: #close window when user exits
       run = False

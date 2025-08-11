@@ -22,10 +22,10 @@ class Board():
                 if white:
                     colour = "white"
                 else:
-                    colour = "black"
+                    colour = (144, 149, 128)
                 if j != 7: #start of new row is same colour as end of previous row so colour should not change
                     white = not white
-                self.__board[i][j] = Square(i, j, 75, colour)
+                self.__board[i][j] = Square(i, j, 84, colour)
 
     #getters
     def get_board(self):
