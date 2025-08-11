@@ -1,22 +1,25 @@
+#imports
 import pygame
 from modules.chess_board.pieces.parent_piece import Piece
+
+#using inheritance of Piece for all these classes
 
 #pawn
 class Pawn(Piece):
 
     #constructor
     def __init__(self, colour, taken, row, column, size):
-        super().__init__("pawn", colour, taken, row, column, size)
+        super().__init__("pawn", colour, taken, row, column, size) #initialising parent class
         self.__has_moved = False
         self.__en_passant = False
         self.__can_promote = False
 
-        if self.get_colour() == "white":
+        if self.get_colour() == "white": #assigning different images based on colour
             self.__image = pygame.image.load("assets/chess_pieces_images/white-pawn.png")
         else:
             self.__image = pygame.image.load("assets/chess_pieces_images/black-pawn.png")
         
-        self.set_rect(self.__image.get_rect(topleft = (row * size, column * size)))
+        self.set_rect(self.__image.get_rect(topleft = (row * size, column * size))) #creating a rect for the image
 
     #getters
     def get_has_moved(self):
