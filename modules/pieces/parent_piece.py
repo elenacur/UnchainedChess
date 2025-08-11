@@ -12,6 +12,7 @@ class Piece():
         self.__size = size
         self.__image = None
         self.__rect = None
+        self.__is_moving = False
 
     #getters
     def get_name(self):
@@ -39,9 +40,16 @@ class Piece():
     def set_taken(self, p_taken):
         self.__taken = p_taken
 
-    def move(self, p_row, p_column):
-        self.__row = p_row
-        self.__column = p_column
+    def move(self, event, pos):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: 
+            if self.__rect.collidepoint(pos): #if user left clicks on piece
+                self.__is_moving = True
+    
+        if event.type == pygame.MOUSEMOTION and self.__is_moving == True: #if user moves mouse after clicking on piece
+            self.__rect.move_ip(event.rel) #update position of the piece by the same change as the mouse position
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1: #if user stops holding down left click
+            self.__is_moving = False #stop moving piece
 
     #other methods
     def get_legal_moves(self):

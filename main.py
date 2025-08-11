@@ -17,14 +17,16 @@ run = True
 while run == True: #game loop
   
   screen.fill((217, 210, 233))
+  pos = pygame.mouse.get_pos() #getting position of the mouse
 
   board.draw(screen)
-
   pawn.draw(screen)
-
 
   #event handler
   for event in pygame.event.get():
+
+    pawn.move(event, pos) #move piece when user drags and drops it
+
     if event.type == pygame.QUIT:
       run = False
 
