@@ -12,8 +12,11 @@ class Piece():
         self.__column = column
         self.__size = size
         self.__image = None
-        self.__rect = pygame.Rect(row * size, column * size, 84, 84) #creating a rect that's same size as a square
         self.__is_moving = False
+        
+        #creating a rect that's same size and position as given square
+        self.__rect = pygame.Rect(row * size + 210, column * size + 70, 84, 84)
+        
 
     #getters
     def get_name(self):
@@ -81,8 +84,9 @@ class Piece():
         None
 
     def draw(self, screen):
-        screen.blit(self.__image, self.__rect.topleft)
-        pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2)
+        #create a rect that is the image's size and position, put this rect as the centre of self.__rect
+        screen.blit(self.__image, self.__image.get_rect(center=self.__rect.center)) #blit image and rect
+        pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
 
     def move(self, event, pos):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: 

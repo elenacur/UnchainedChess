@@ -13,8 +13,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #instantiating objects
 board = Board("", True, 0, False)
-pawn1 = Pawn("white", False, 1, 1, 20)
-pawn2 = Pawn("black", False, 1, 1, 40)
+pawn1 = Pawn("white", False, 1, 1, 84)
+pawn2 = Pawn("black", False, 1, 2, 84)
 
 run = True
 while run == True: #game loop
@@ -22,6 +22,7 @@ while run == True: #game loop
   screen.fill((217, 210, 233)) #background colour
   pos = pygame.mouse.get_pos() #getting position of the mouse
 
+  #drawing objects onto the screen
   board.draw_whole_board(screen)
   pawn1.draw(screen)
   pawn2.draw(screen)
