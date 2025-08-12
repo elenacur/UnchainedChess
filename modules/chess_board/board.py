@@ -5,11 +5,12 @@ from modules.chess_board.square import Square
 class Board():
 
     #constructor
-    def __init__(self, fen, whites_turn, num_of_moves, game_over):
+    def __init__(self, square_size, fen, whites_turn, num_of_moves, game_over):
         self.__board = [["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]] #2D array of sqauares
+        self.__square_size = square_size
         self.__fen = fen
         self.__whites_turn = whites_turn
         self.__num_of_moves = num_of_moves
@@ -25,7 +26,7 @@ class Board():
                     colour = (144, 149, 128)
                 if j != 7: #start of new row is same colour as end of previous row so colour should not change
                     white = not white
-                self.__board[i][j] = Square(i, j, 84, colour)
+                self.__board[i][j] = Square(i, j, self.__square_size, colour)
 
     #getters
     def get_board(self):

@@ -13,10 +13,8 @@ class Piece():
         self.__size = size
         self.__image = None
         self.__is_moving = False
-        
-        #creating a rect that's same size and position as given square
-        self.__rect = pygame.Rect(row * size + 210, column * size + 70, 84, 84)
-        
+        self.__rect = pygame.Rect(self.__row * self.__size + 210, self.__column * self.__size + 70, 
+                                  self.__size, self.__size) #creating rect that's same size and position as square
 
     #getters
     def get_name(self):

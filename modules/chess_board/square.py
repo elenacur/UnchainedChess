@@ -11,7 +11,8 @@ class Square:
         self.__colour = colour
         self.__piece = None
         self.__highlight = False
-        self.__rect = pygame.Rect(column * size + 210, row * size + 70, size, size) #square without colour
+        self.__rect = pygame.Rect(self.__column * self.__size + 210, self.__row * self.__size + 70, 
+                                  self.__size, self.__size) #square without colour
 
     #getters
     def get_row(self):
