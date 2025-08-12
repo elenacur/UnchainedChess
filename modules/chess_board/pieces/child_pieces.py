@@ -18,8 +18,8 @@ class Pawn(Piece):
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-pawn.png"))
         else:
             self.set_image(pygame.image.load("assets/chess_pieces_images/black-pawn.png"))
-        
-        self.set_image(pygame.transform.scale_by(self.get_image(), 0.8)) #scaling the image by 0.8
+
+        self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
 
     #getters
     def get_has_moved(self):
