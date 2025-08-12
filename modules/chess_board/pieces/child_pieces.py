@@ -21,8 +21,6 @@ class Pawn(Piece):
         
         self.set_image(pygame.transform.scale_by(self.get_image(), 0.8)) #scaling the image by 0.8
 
-        self.set_rect(self.get_image().get_rect(topleft = (row * size, column * size))) #creating rect for the image
-
     #getters
     def get_has_moved(self):
         return self.__has_moved
@@ -49,9 +47,6 @@ class Pawn(Piece):
 
     def promote(self, new_piece):
         None
-
-    def draw(self, screen):
-        screen.blit(self.get_image(), self.get_rect())
 
 #king
 class King(Piece):
