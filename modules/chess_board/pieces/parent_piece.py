@@ -14,8 +14,8 @@ class Piece():
         self.__image = None
         self.__is_moving = False
         self.__rect = pygame.Rect(self.__row * self.__size + 210, self.__column * self.__size + 70, 
-                                  self.__size, self.__size) #creating rect that's same size and position as square
-
+                            self.__size, self.__size) #creating rect that's same size and position as given square
+        
     #getters
     def get_name(self):
         return self.__name
@@ -82,17 +82,20 @@ class Piece():
         None
 
     def draw(self, screen):
-        #create a rect that is the image's size and position, put this rect as the centre of self.__rect
+        #create a rect that is the image's size and position, put this rect at the centre of self.__rect
         screen.blit(self.__image, self.__image.get_rect(center=self.__rect.center)) #blit image and rect
         pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
 
+    #allows user to move self.__rect
     def move(self, event, pos):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: 
-            if self.__rect.collidepoint(pos): #if user left clicks on piece
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            #self.__rect.center = pos
+            if self.__rect.collidepoint(pos): #if user left clicks on rect
                 self.__is_moving = True
     
-        if event.type == pygame.MOUSEMOTION and self.__is_moving == True: #if user moves mouse after clicking on piece
-            self.__rect.move_ip(event.rel) #update position of the piece by the same change as the mouse position
+        if event.type == pygame.MOUSEMOTION and self.__is_moving == True: #if user moves mouse after clicking on rect
+            self.__rect.center = pos #update position of rect's centre to position of mouse
 
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1: #if user stops holding down left click
-            self.__is_moving = False #stop moving piece
+            self.__is_moving = False #stop moving rect
+
