@@ -8,8 +8,8 @@ from modules.chess_board.pieces.parent_piece import Piece
 class Pawn(Piece):
 
     #constructor
-    def __init__(self, colour, taken, row, column, size):
-        super().__init__("pawn", colour, taken, row, column, size) #initialising parent class
+    def __init__(self, board, colour, taken, row, column, size):
+        super().__init__("pawn", board, colour, taken, row, column, size) #initialising parent class
         self.__has_moved = False
         self.__en_passant = False
         self.__can_promote = False

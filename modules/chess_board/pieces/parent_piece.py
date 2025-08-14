@@ -1,11 +1,14 @@
 #imports
 import pygame
+from modules.chess_board.board import Board
+from modules.chess_board.square import Square
 
 class Piece():
 
     #constructor
-    def __init__(self, name, colour, taken, row, column, size):
+    def __init__(self, name, board, colour, taken, row, column, size):
         self.__name = name
+        self.__board = board
         self.__colour = colour
         self.__taken = taken
         self.__row = row
@@ -13,12 +16,16 @@ class Piece():
         self.__size = size
         self.__image = None
         self.__is_moving = False
+        self.__original_pos = None
         self.__rect = pygame.Rect(self.__row * self.__size + 210, self.__column * self.__size + 70, 
                             self.__size, self.__size) #creating rect that's same size and position as given square
         
     #getters
     def get_name(self):
         return self.__name
+    
+    def get_board(self):
+        return self.__board
 
     def get_colour(self):
         return self.__colour
@@ -89,13 +96,27 @@ class Piece():
     #allows user to move self.__rect
     def move(self, event, pos):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            #self.__rect.center = pos
             if self.__rect.collidepoint(pos): #if user left clicks on rect
                 self.__is_moving = True
+                self.__original_pos = self.__rect.center
     
         if event.type == pygame.MOUSEMOTION and self.__is_moving == True: #if user moves mouse after clicking on rect
             self.__rect.center = pos #update position of rect's centre to position of mouse
 
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1: #if user stops holding down left click
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and self.__is_moving == True: #if user stops holding down left click
             self.__is_moving = False #stop moving rect
+
+            #moving piece to centre of square the user drops the rect on
+            not_on_a_square = 0
+            for list in self.__board.get_board():
+                for square in list:
+                    if square.get_rect().collidepoint(pos):
+                        self.__rect.center = square.get_rect().center
+                    else:
+                        not_on_a_square += 1
+            if not_on_a_square == 64:
+                self.__rect.center = self.__original_pos
+
+
+
 

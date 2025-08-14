@@ -13,8 +13,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #instantiating objects
 board = Board(84, "", True, 0, False)
-pawn1 = Pawn("white", False, 1, 1, 84)
-pawn2 = Pawn("black", False, 1, 2, 84)
+pawn1 = Pawn(board, "white", False, 1, 1, 84)
+pawn2 = Pawn(board, "black", False, 1, 2, 84)
 
 run = True
 while run == True: #game loop
