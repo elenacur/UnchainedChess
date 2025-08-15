@@ -28,7 +28,7 @@ while run == True: #game loop
   #event handler
   for event in pygame.event.get():
 
-    board.move_pieces(event, pos)
+    board.move_pieces(event, pos) #allows user to move pieces
 
     if event.type == pygame.QUIT: #close window when user exits
       run = False
@@ -37,5 +37,5 @@ while run == True: #game loop
 
 pygame.quit()
 
-board.print_pieces()
+#board.print_pieces() #prints the current board position in terminal
 

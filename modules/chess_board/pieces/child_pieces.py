@@ -10,9 +10,9 @@ class Pawn(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("pawn", board, colour, taken, row, column, size) #initialising parent class
-        self.__has_moved = False
-        self.__en_passant = False
-        self.__can_promote = False
+        self.__has_moved = False #for checking if pawn can move two squares
+        self.__en_passant = False #for en passant
+        self.__can_promote = False #for promoting
 
         if self.get_colour() == "white": #assigning different images based on colour
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-pawn.png"))
@@ -48,7 +48,147 @@ class Pawn(Piece):
     def promote(self, new_piece):
         None
 
+#rook
+class Rook(Piece):
+
+    #constructor
+    def __init__(self, board, colour, taken, row, column, size):
+        super().__init__("rook", board, colour, taken, row, column, size) #initialising parent class
+        self.__has_moved = False #for castling
+
+        if self.get_colour() == "white": #assigning different images based on colour
+            self.set_image(pygame.image.load("assets/chess_pieces_images/white-rook.png"))
+        else:
+            self.set_image(pygame.image.load("assets/chess_pieces_images/black-rook.png"))
+
+        self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
+
+    #getters
+    def get_has_moved(self):
+        return self.__has_moved
+    
+    #setters
+    def set_has_moved(self, p_has_moved):
+        self.__has_moved = p_has_moved
+
+    #other methods
+    def get_legal_moves(self):
+        None
+    
+    def castle(self):
+        None
+
+#knight
+class Knight(Piece):
+
+    #constructor
+    def __init__(self, board, colour, taken, row, column, size):
+        super().__init__("knight", board, colour, taken, row, column, size) #initialising parent class
+
+        if self.get_colour() == "white": #assigning different images based on colour
+            self.set_image(pygame.image.load("assets/chess_pieces_images/white-knight.png"))
+        else:
+            self.set_image(pygame.image.load("assets/chess_pieces_images/black-knight.png"))
+
+        self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
+
+    #getters
+    
+    #setters
+
+    #other methods
+    def get_legal_moves(self):
+        None
+
+#bishop
+class Bishop(Piece):
+
+    #constructor
+    def __init__(self, board, colour, taken, row, column, size):
+        super().__init__("bishop", board, colour, taken, row, column, size) #initialising parent class
+
+        if self.get_colour() == "white": #assigning different images based on colour
+            self.set_image(pygame.image.load("assets/chess_pieces_images/white-bishop.png"))
+        else:
+            self.set_image(pygame.image.load("assets/chess_pieces_images/black-bishop.png"))
+
+        self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
+
+    #getters
+    
+    #setters
+
+    #other methods
+    def get_legal_moves(self):
+        None
+
+#queen
+class Queen(Piece):
+
+    #constructor
+    def __init__(self, board, colour, taken, row, column, size):
+        super().__init__("queen", board, colour, taken, row, column, size) #initialising parent class
+
+        if self.get_colour() == "white": #assigning different images based on colour
+            self.set_image(pygame.image.load("assets/chess_pieces_images/white-queen.png"))
+        else:
+            self.set_image(pygame.image.load("assets/chess_pieces_images/black-queen.png"))
+
+        self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
+
+    #getters
+    
+    #setters
+
+    #other methods
+    def get_legal_moves(self):
+        None
+
 #king
 class King(Piece):
-    None
+
+    #constructor
+    def __init__(self, board, colour, taken, row, column, size):
+        super().__init__("king", board, colour, taken, row, column, size) #initialising parent class
+        self.__checked = False #for legal moves
+        self.__checkmated = False #for ending the game
+        self.__has_moved = False #for castling
+        self.__can_move = False #for stalemates
+
+        if self.get_colour() == "white": #assigning different images based on colour
+            self.set_image(pygame.image.load("assets/chess_pieces_images/white-king.png"))
+        else:
+            self.set_image(pygame.image.load("assets/chess_pieces_images/black-king.png"))
+
+        self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
+
+    # getters
+    def get_checked(self):
+        return self.__checked
+
+    def get_checkmated(self):
+        return self.__checkmated
+
+    def get_has_moved(self):
+        return self.__has_moved
+
+    def get_can_move(self):
+        return self.__can_move
+
+    # setters
+    def set_checked(self, p_checked):
+        self.__checked = p_checked
+
+    def set_checkmated(self, p_checkmated):
+        self.__checkmated = p_checkmated
+
+    def set_has_moved(self, p_has_moved):
+        self.__has_moved = p_has_moved
+
+    def set_can_move(self, p_can_move):
+        self.__can_move = p_can_move
+
+    #other methods
+    def get_legal_moves(self):
+        None
 

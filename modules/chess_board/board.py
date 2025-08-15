@@ -1,7 +1,6 @@
 #imports
-import pygame
 from modules.chess_board.square import Square
-from modules.chess_board.pieces.child_pieces import Pawn
+from modules.chess_board.pieces.child_pieces import Pawn, Rook, Knight, Bishop, Queen, King
 
 class Board():
 
@@ -10,7 +9,7 @@ class Board():
         self.__board = [["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
-                        ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]] #2D array of sqauares
+                        ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]] #2D array of Square objects
         self.__pieces = [[None, None, None, None, None, None, None, None], 
                          [None, None, None, None, None, None, None, None], 
                          [None, None, None, None, None, None, None, None], 
@@ -18,7 +17,7 @@ class Board():
                          [None, None, None, None, None, None, None, None], 
                          [None, None, None, None, None, None, None, None], 
                          [None, None, None, None, None, None, None, None], 
-                         [None, None, None, None, None, None, None, None]] #2D array of pieces
+                         [None, None, None, None, None, None, None, None]] #2D array of Piece objects
         self.__square_size = square_size
         self.__fen = fen
         self.__whites_turn = whites_turn
@@ -76,7 +75,7 @@ class Board():
         self.__game_over = p_game_over
 
     #other methods
-    def reset_board(self):
+    def reset_board(self): #filling pieces array with Piece objects in order of chess starting position
         
         #pawns
         for i in range(0, 8):
@@ -86,33 +85,49 @@ class Board():
             self.__pieces[6][i] = Pawn(self, "white", False, 6, i, 84)
 
         #rooks
+        self.__pieces[0][0] = Rook(self, "black", False, 0, 0, 84)
+        self.__pieces[0][7] = Rook(self, "black", False, 0, 7, 84)
+        self.__pieces[7][0] = Rook(self, "white", False, 7, 0, 84)
+        self.__pieces[7][7] = Rook(self, "white", False, 7, 7, 84)
 
         #knights
+        self.__pieces[0][1] = Knight(self, "black", False, 0, 1, 84)
+        self.__pieces[0][6] = Knight(self, "black", False, 0, 6, 84)
+        self.__pieces[7][1] = Knight(self, "white", False, 7, 1, 84)
+        self.__pieces[7][6] = Knight(self, "white", False, 7, 6, 84)
 
         #bishops
+        self.__pieces[0][2] = Bishop(self, "black", False, 0, 2, 84)
+        self.__pieces[0][5] = Bishop(self, "black", False, 0, 5, 84)
+        self.__pieces[7][2] = Bishop(self, "white", False, 7, 2, 84)
+        self.__pieces[7][5] = Bishop(self, "white", False, 7, 5, 84)
 
         #queens
+        self.__pieces[0][3] = Queen(self, "black", False, 0, 3, 84)
+        self.__pieces[7][3] = Queen(self, "white", False, 7, 3, 84)
 
         #kings
+        self.__pieces[0][4] = King(self, "black", False, 0, 4, 84)
+        self.__pieces[7][4] = King(self, "white", False, 7, 4, 84)
     
     def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
         for i in self.__board:
             for j in i:
                 j.draw_square(screen)
     
-    def draw_all_pieces(self, screen): #draws every object in the piece array and allows them to move
+    def draw_all_pieces(self, screen): #draws every object in the piece array
         for i in self.__pieces:
             for j in i:
                 if j != None:
                     j.draw_piece(screen)
     
-    def move_pieces(self, event, pos):
+    def move_pieces(self, event, pos): #allows user to move pieces
         for list in self.__pieces:
             for piece in list:
                 if piece != None:
                     piece.move(event, pos)
 
-    def print_pieces(self):
+    def print_pieces(self): #prints the current board position in terminal
         for list in self.__pieces:
             for piece in list:
                 if piece != None:
