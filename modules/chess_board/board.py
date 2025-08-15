@@ -1,6 +1,7 @@
 #imports
 import pygame
 from modules.chess_board.square import Square
+from modules.chess_board.pieces.child_pieces import Pawn
 
 class Board():
 
@@ -10,6 +11,14 @@ class Board():
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]] #2D array of sqauares
+        self.__pieces = [[None, None, None, None, None, None, None, None], 
+                         [None, None, None, None, None, None, None, None], 
+                         [None, None, None, None, None, None, None, None], 
+                         [None, None, None, None, None, None, None, None], 
+                         [None, None, None, None, None, None, None, None], 
+                         [None, None, None, None, None, None, None, None], 
+                         [None, None, None, None, None, None, None, None], 
+                         [None, None, None, None, None, None, None, None]] #2D array of pieces
         self.__square_size = square_size
         self.__fen = fen
         self.__whites_turn = whites_turn
@@ -32,6 +41,9 @@ class Board():
     def get_board(self):
         return self.__board
     
+    def get_pieces(self):
+        return self.__pieces
+    
     def get_fen(self):
         return self.__fen
     
@@ -47,6 +59,9 @@ class Board():
     #setters
     def set_board(self, p_board):
         self.__board = p_board
+
+    def set_pieces(self, new_piece, row, column):
+        self.__pieces[row][column] = new_piece
     
     def set_fen(self, p_fen):
         self.__fen = p_fen
@@ -62,12 +77,49 @@ class Board():
 
     #other methods
     def reset_board(self):
-        None
+        
+        #pawns
+        for i in range(0, 8):
+            self.__pieces[1][i] = Pawn(self, "black", False, 1, i, 84)
+
+        for i in range(0, 8):
+            self.__pieces[6][i] = Pawn(self, "white", False, 6, i, 84)
+
+        #rooks
+
+        #knights
+
+        #bishops
+
+        #queens
+
+        #kings
     
     def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
         for i in self.__board:
             for j in i:
                 j.draw_square(screen)
+    
+    def draw_all_pieces(self, screen): #draws every object in the piece array and allows them to move
+        for i in self.__pieces:
+            for j in i:
+                if j != None:
+                    j.draw_piece(screen)
+    
+    def move_pieces(self, event, pos):
+        for list in self.__pieces:
+            for piece in list:
+                if piece != None:
+                    piece.move(event, pos)
+
+    def print_pieces(self):
+        for list in self.__pieces:
+            for piece in list:
+                if piece != None:
+                    print(piece.get_name(), end = " ")
+                else:
+                    print("None", end = " ")
+            print()
 
 
     

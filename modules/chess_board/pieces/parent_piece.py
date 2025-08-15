@@ -1,7 +1,5 @@
 #imports
 import pygame
-from modules.chess_board.board import Board
-from modules.chess_board.square import Square
 
 class Piece():
 
@@ -17,7 +15,7 @@ class Piece():
         self.__image = None
         self.__is_moving = False
         self.__original_pos = None
-        self.__rect = pygame.Rect(self.__row * self.__size + 210, self.__column * self.__size + 70, 
+        self.__rect = pygame.Rect(self.__column * self.__size + 210, self.__row * self.__size + 70, 
                             self.__size, self.__size) #creating rect that's same size and position as given square
         
     #getters
@@ -88,7 +86,7 @@ class Piece():
     def remove(self):
         None
 
-    def draw(self, screen):
+    def draw_piece(self, screen):
         #create a rect that is the image's size and position, put this rect at the centre of self.__rect
         screen.blit(self.__image, self.__image.get_rect(center=self.__rect.center)) #blit image and rect
         pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
@@ -112,6 +110,10 @@ class Piece():
                 for square in list:
                     if square.get_rect().collidepoint(pos):
                         self.__rect.center = square.get_rect().center
+                        self.__board.set_pieces(None, self.__row, self.__column)
+                        self.__column = square.get_column()
+                        self.__row = square.get_row()
+                        self.__board.set_pieces(self, self.__row, self.__column)
                     else:
                         not_on_a_square += 1
             if not_on_a_square == 64:

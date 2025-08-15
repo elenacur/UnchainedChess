@@ -11,10 +11,9 @@ SCREEN_HEIGHT = 756
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-#instantiating objects
+#instantiating board
 board = Board(84, "", True, 0, False)
-pawn1 = Pawn(board, "white", False, 1, 1, 84)
-pawn2 = Pawn(board, "black", False, 1, 2, 84)
+board.reset_board()
 
 run = True
 while run == True: #game loop
@@ -24,14 +23,12 @@ while run == True: #game loop
 
   #drawing objects onto the screen
   board.draw_whole_board(screen)
-  pawn1.draw(screen)
-  pawn2.draw(screen)
+  board.draw_all_pieces(screen)
 
   #event handler
   for event in pygame.event.get():
 
-    pawn1.move(event, pos) #move piece when user drags and drops it
-    pawn2.move(event, pos)
+    board.move_pieces(event, pos)
 
     if event.type == pygame.QUIT: #close window when user exits
       run = False
@@ -39,4 +36,6 @@ while run == True: #game loop
   pygame.display.update()  
 
 pygame.quit()
+
+board.print_pieces()
 
