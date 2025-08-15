@@ -89,7 +89,7 @@ class Piece():
     def draw_piece(self, screen):
         #create a rect that is the image's size and position, put this rect at the centre of self.__rect
         screen.blit(self.__image, self.__image.get_rect(center=self.__rect.center)) #blit image and rect
-        pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
+        #pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
 
     #allows user to move the piece's rect
     def move(self, event, pos):
