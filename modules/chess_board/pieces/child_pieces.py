@@ -100,8 +100,17 @@ class Knight(Piece):
     #setters
 
     #other methods
-    def get_legal_moves(self):
-        None
+    def legal(self, colour, pieces):
+        friendly_fire = False
+        legal_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)] #ways a knight can move  
+        for i in range(0, 8):
+            legal_row = self.get_row() + legal_moves[i][0]
+            legal_column = self.get_column() + legal_moves[i][1]
+            if pieces[self.get_new_row()][self.get_new_column()] != None:
+                if pieces[self.get_new_row()][self.get_new_column()].get_colour() == colour:
+                    friendly_fire = True
+            if self.get_new_row() == legal_row and self.get_new_column() == legal_column and 0 <= self.get_new_row() <= 7 and 0 <= self.get_new_column() <= 7 and friendly_fire == False:
+                return True
 
 #bishop
 class Bishop(Piece):

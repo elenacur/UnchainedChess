@@ -129,6 +129,11 @@ class Board():
             for j in i:
                 j.draw_square(screen)
     
+    def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
+        for i in self.__board:
+            for j in i:
+                j.draw_square(screen)
+    
     def draw_all_pieces(self, screen): #draws every object in the piece array
         for i in self.__pieces:
             for j in i:
@@ -141,7 +146,7 @@ class Board():
                 if piece != None:
 
                     #updating piece array and piece attributes
-                    returned_values = piece.move(event, pos)
+                    returned_values = piece.move(event, pos, self.__pieces)
                     if returned_values != None:
                         new_row, new_column = returned_values
                         self.set_pieces(None, piece.get_row(), piece.get_column()) 
@@ -171,6 +176,8 @@ class Board():
         black_points_str = str(self.__black_points)
         screen.blit(text.render(white_points_str, True, "black"), (100, 100))
         screen.blit(text.render(black_points_str, True, "black"), (50, 100))
+
+            
 
 
         

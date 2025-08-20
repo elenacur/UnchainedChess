@@ -16,8 +16,11 @@ class Piece():
         self.__is_moving = False
         self.__original_pos = None
         self.__value = None
+        self.__new_row = None
+        self.__new_column = None
+        #creating rect that's same size and position as given square and correct perspective
         self.__rect = pygame.Rect(self.__column * self.__size + 210, self.__row * self.__size + 70, 
-                            self.__size, self.__size) #creating rect that's same size and position as given square
+                            self.__size, self.__size) 
         
     #getters
     def get_name(self):
@@ -52,6 +55,12 @@ class Piece():
     
     def get_value(self):
         return self.__value
+    
+    def get_new_row(self):
+        return self.__new_row
+    
+    def get_new_column(self):
+        return self.__new_column
 
     def get_rect(self):
         return self.__rect
@@ -87,6 +96,12 @@ class Piece():
     def set_value(self, p_value):
         self.__value = p_value
 
+    def set_new_row(self, p_new_row):
+        self.__new_row = p_new_row
+
+    def set_new_column(self, p_new_column):
+        self.__new_column = p_new_column
+
     def set_rect(self, p_rect):
         self.__rect = p_rect
 
@@ -105,7 +120,7 @@ class Piece():
         #pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
 
     #allows user to move the piece's rect
-    def move(self, event, pos):
+    def move(self, event, pos, pieces):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.__rect.collidepoint(pos): #if user left clicks on piece's rect
                 self.__is_moving = True
@@ -125,10 +140,13 @@ class Piece():
                         self.__rect.center = square.get_rect().center #locking piece's rect to centre of square
 
                         #returning new row and column of piece
-                        new_row = square.get_row()
-                        new_column = square.get_column()
-                        return (new_row, new_column)
+                        self.__new_row = square.get_row()
+                        self.__new_column = square.get_column()
 
+                        if self.legal(self.__colour, pieces):
+                            return (self.__new_row, self.__new_column)
+                        else:
+                            self.__rect.center = self.__original_pos #return piece to position before user moved it
                     else:
                         not_on_a_square += 1
             if not_on_a_square == 64: #if user lets go of piece outside of chess board
