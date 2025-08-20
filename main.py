@@ -5,11 +5,13 @@ from modules.chess_board.pieces.child_pieces import Pawn
 
 pygame.init()
 
-#window and sizing
+#window and sizing and text
 SCREEN_WIDTH = 1344
 SCREEN_HEIGHT = 756
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+default_text = pygame.font.SysFont("Arial", 30)
 
 #instantiating board
 board = Board(84, "", True, 0, False)
@@ -24,6 +26,7 @@ while run == True: #game loop
   #drawing objects onto the screen
   board.draw_whole_board(screen)
   board.draw_all_pieces(screen)
+  board.draw_points(screen, default_text)
 
   #event handler
   for event in pygame.event.get():

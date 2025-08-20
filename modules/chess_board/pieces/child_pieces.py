@@ -13,6 +13,7 @@ class Pawn(Piece):
         self.__has_moved = False #for checking if pawn can move two squares
         self.__en_passant = False #for en passant
         self.__can_promote = False #for promoting
+        self.set_value(1)
 
         if self.get_colour() == "white": #assigning different images based on colour
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-pawn.png"))
@@ -55,6 +56,7 @@ class Rook(Piece):
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("rook", board, colour, taken, row, column, size) #initialising parent class
         self.__has_moved = False #for castling
+        self.set_value(5)
 
         if self.get_colour() == "white": #assigning different images based on colour
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-rook.png"))
@@ -84,6 +86,7 @@ class Knight(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("knight", board, colour, taken, row, column, size) #initialising parent class
+        self.set_value(3)
 
         if self.get_colour() == "white": #assigning different images based on colour
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-knight.png"))
@@ -106,6 +109,7 @@ class Bishop(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("bishop", board, colour, taken, row, column, size) #initialising parent class
+        self.set_value(3)
 
         if self.get_colour() == "white": #assigning different images based on colour
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-bishop.png"))
@@ -128,6 +132,7 @@ class Queen(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("queen", board, colour, taken, row, column, size) #initialising parent class
+        self.set_value(9)
 
         if self.get_colour() == "white": #assigning different images based on colour
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-queen.png"))
@@ -154,6 +159,7 @@ class King(Piece):
         self.__checkmated = False #for ending the game
         self.__has_moved = False #for castling
         self.__can_move = False #for stalemates
+        self.set_value(0) #kings do not have a value
 
         if self.get_colour() == "white": #assigning different images based on colour
             self.set_image(pygame.image.load("assets/chess_pieces_images/white-king.png"))

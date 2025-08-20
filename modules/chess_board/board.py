@@ -23,6 +23,8 @@ class Board():
         self.__whites_turn = whites_turn
         self.__num_of_moves = num_of_moves
         self.__game_over = game_over
+        self.__white_points = 0
+        self.__black_points = 0
 
         #putting Square objects in the board array, alternating black and white
         white = True
@@ -40,8 +42,8 @@ class Board():
     def get_board(self):
         return self.__board
     
-    def get_pieces(self):
-        return self.__pieces
+    def get_pieces(self, row, column):
+        return self.__pieces[row][column]
     
     def get_fen(self):
         return self.__fen
@@ -54,6 +56,12 @@ class Board():
     
     def get_game_over(self):
         return self.__game_over
+    
+    def get_white_points(self):
+        return self.__white_points
+    
+    def get_black_points(self):
+        return self.__black_points
     
     #setters
     def set_board(self, p_board):
@@ -73,6 +81,12 @@ class Board():
     
     def set_game_over(self, p_game_over):
         self.__game_over = p_game_over
+
+    def set_white_points(self, p_white_points):
+        self.__white_points = p_white_points
+
+    def set_black_points(self, p_black_points):
+        self.__black_points = p_black_points
 
     #other methods
     def reset_board(self): #filling pieces array with Piece objects in order of chess starting position
@@ -125,7 +139,16 @@ class Board():
         for list in self.__pieces:
             for piece in list:
                 if piece != None:
-                    piece.move(event, pos)
+
+                    #updating piece array and piece attributes
+                    returned_values = piece.move(event, pos)
+                    if returned_values != None:
+                        new_row, new_column = returned_values
+                        self.set_pieces(None, piece.get_row(), piece.get_column()) 
+                        self.update_points(self.get_pieces(new_row, new_column)) #updates points
+                        piece.set_row(new_row)
+                        piece.set_column(new_column)
+                        self.set_pieces(piece, new_row, new_column)
 
     def print_pieces(self): #prints the current board position in terminal
         for list in self.__pieces:
@@ -135,8 +158,19 @@ class Board():
                 else:
                     print("None", end = " ")
             print()
-
-
     
+    def update_points(self, taken_piece): #updates points of each player i.e. total value of pieces they've taken
+        if taken_piece != None:
+            if taken_piece.get_colour() == "white":
+                self.__black_points += taken_piece.get_value()
+            else:
+                self.__white_points += taken_piece.get_value()
 
-    
+    def draw_points(self, screen, text):
+        white_points_str = str(self.__white_points)
+        black_points_str = str(self.__black_points)
+        screen.blit(text.render(white_points_str, True, "black"), (100, 100))
+        screen.blit(text.render(black_points_str, True, "black"), (50, 100))
+
+
+        

@@ -15,6 +15,7 @@ class Piece():
         self.__image = None
         self.__is_moving = False
         self.__original_pos = None
+        self.__value = None
         self.__rect = pygame.Rect(self.__column * self.__size + 210, self.__row * self.__size + 70, 
                             self.__size, self.__size) #creating rect that's same size and position as given square
         
@@ -42,12 +43,18 @@ class Piece():
 
     def get_image(self):
         return self.__image 
-
-    def get_rect(self):
-        return self.__rect
     
     def get_is_moving(self):
         return self.__is_moving
+    
+    def get_original_pos(self):
+        return self.__original_pos
+    
+    def get_value(self):
+        return self.__value
+
+    def get_rect(self):
+        return self.__rect
 
     #setters
     def set_name(self, p_name):
@@ -71,11 +78,17 @@ class Piece():
     def set_image(self, p_image):
         self.__image = p_image
 
-    def set_rect(self, p_rect):
-        self.__rect = p_rect
-
     def set_is_moving(self, p_is_moving):
         self.__is_moving = p_is_moving
+
+    def set_original_pos(self, p_original_pos):
+        self.__is_moving = p_original_pos
+
+    def set_value(self, p_value):
+        self.__value = p_value
+
+    def set_rect(self, p_rect):
+        self.__rect = p_rect
 
 
     #other methods
@@ -111,11 +124,11 @@ class Piece():
                     if square.get_rect().collidepoint(pos):
                         self.__rect.center = square.get_rect().center #locking piece's rect to centre of square
 
-                        #updating piece array and piece attributes
-                        self.__board.set_pieces(None, self.__row, self.__column) 
-                        self.__column = square.get_column()
-                        self.__row = square.get_row()
-                        self.__board.set_pieces(self, self.__row, self.__column)
+                        #returning new row and column of piece
+                        new_row = square.get_row()
+                        new_column = square.get_column()
+                        return (new_row, new_column)
+
                     else:
                         not_on_a_square += 1
             if not_on_a_square == 64: #if user lets go of piece outside of chess board
