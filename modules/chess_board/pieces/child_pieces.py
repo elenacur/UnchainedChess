@@ -46,7 +46,6 @@ class Pawn(Piece):
     def get_legal_moves(self, colour, pieces):
         legal_moves = []
 
-
         #pawns can only move in one direction depending on their colour
         if colour == "white":
             colour_factor = -1
@@ -97,8 +96,57 @@ class Rook(Piece):
         self.__has_moved = p_has_moved
 
     #other methods
-    def get_legal_moves(self):
-        None
+    def get_legal_moves(self, colour, pieces):
+        legal_moves = []
+        num_columns_left = self.get_column() + 1
+        num_columns_right = 8 - self.get_column()
+        num_rows_up = self.get_row() + 1
+        num_rows_down = 8 - self.get_row()
+
+        #checking up
+        no_blockages = True
+        while no_blockages:
+            for i in range(1, num_rows_up):
+                if pieces[self.get_row() - i][self.get_column()] != None:
+                    no_blockages = False
+                    if pieces[self.get_row() - i][self.get_column()].get_colour() != colour:
+                        legal_moves.append([self.get_row() - i, self.get_column()])
+                else:
+                    legal_moves.append([self.get_row() - i, self.get_column()])
+        
+        #checking down
+        no_blockages = True
+        while no_blockages:
+            for i in range(1, num_rows_down):
+                if pieces[self.get_row() + i][self.get_column()] != None:
+                    no_blockages = False
+                    if pieces[self.get_row() + i][self.get_column()].get_colour() != colour:
+                        legal_moves.append([self.get_row() + i, self.get_column()])
+                else:
+                    legal_moves.append([self.get_row() + i, self.get_column()])
+        
+        #checking left
+        no_blockages = True
+        while no_blockages:
+            for i in range(1, num_columns_left):
+                if pieces[self.get_row()][self.get_column() - i] != None:
+                    no_blockages = False
+                    if pieces[self.get_row()][self.get_column() - i].get_colour() != colour:
+                        legal_moves.append([self.get_row(), self.get_column() - i])
+                else:
+                    legal_moves.append([self.get_row(), self.get_column() - i])
+        
+        #checking right
+        no_blockages = True
+        while no_blockages:
+            for i in range(1, num_columns_right):
+                if pieces[self.get_row()][self.get_column() + i] != None:
+                    no_blockages = False
+                    if pieces[self.get_row()][self.get_column() + i].get_colour() != colour:
+                        legal_moves.append([self.get_row(), self.get_column() + i])
+                else:
+                    legal_moves.append([self.get_row(), self.get_column() + i])
+
     
     def castle(self):
         None
