@@ -44,30 +44,29 @@ class Pawn(Piece):
 
     #other methods
     def legal(self, colour, pieces):
-        friendly_fire = False
-        moving_forward = False
-        taking_diagonally = False
 
+        #pawns can only move in one direction depending on their colour
         if colour == "white":
             colour_factor = -1
         else:
             colour_factor = 1
 
+        #moving forward
         if self.get_new_column() == self.get_column():
-            if self.get_new_row() == self.get_row() + colour_factor * 1:
+            if self.get_new_row() == self.get_row() + colour_factor * 1: #moving 1 square forward
                 if pieces[self.get_new_row()][self.get_new_column()] == None:
                     self.__has_moved = True
-                    return True
-            elif self.get_new_row() == self.get_row() + colour_factor * 2 and self.__has_moved == False:
+                    return True 
+            elif self.get_new_row() == self.get_row() + colour_factor * 2 and self.__has_moved == False: # moving 2 squares forward
                 if pieces[self.get_new_row()][self.get_new_column()] == None and pieces[self.get_row() + colour_factor][self.get_column()] == None:
                     self.__has_moved = True
                     return True
+        #taking diagonally
         elif self.get_new_row() == self.get_row() + colour_factor:
             if self.get_new_column() == self.get_column() + 1 or self.get_new_column() == self.get_column() + -1:
                 if pieces[self.get_new_row()][self.get_new_column()] != None:
                     if pieces[self.get_new_row()][self.get_new_column()].get_colour() != colour:
                         return True
-
 
 
     def promote(self, new_piece):
@@ -124,17 +123,22 @@ class Knight(Piece):
     #setters
 
     #other methods
-    def legal(self, colour, pieces):
-        friendly_fire = False
-        legal_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)] #ways a knight can move  
+    def get_legal_moves(self, colour, pieces):
+        legal_moves = []
+        friendly_fire = False #so it can't take a piece of the same colour
+        knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)] #ways a knight can move  
         for i in range(0, 8):
-            legal_row = self.get_row() + legal_moves[i][0]
-            legal_column = self.get_column() + legal_moves[i][1]
+            legal_row = self.get_row() + knight_moves[i][0]
+            legal_column = self.get_column() + knight_moves[i][1]
             if pieces[self.get_new_row()][self.get_new_column()] != None:
-                if pieces[self.get_new_row()][self.get_new_column()].get_colour() == colour:
+                if pieces[self.get_new_row()][self.get_new_column()].get_colour() == colour: 
                     friendly_fire = True
-            if self.get_new_row() == legal_row and self.get_new_column() == legal_column and 0 <= self.get_new_row() <= 7 and 0 <= self.get_new_column() <= 7 and friendly_fire == False:
-                return True
+
+            #adding this move to the legal_moves list if it's in range and isn't moving to a piece of the same colour
+            if 0 <= legal_row <= 7 and 0 <= legal_column <= 7 and friendly_fire == False:
+                legal_moves.append([legal_row, legal_column])
+        
+        return legal_moves
 
 #bishop
 class Bishop(Piece):

@@ -143,10 +143,16 @@ class Piece():
                         self.__new_row = square.get_row()
                         self.__new_column = square.get_column()
 
-                        if self.legal(self.__colour, pieces):
-                            return (self.__new_row, self.__new_column)
+                        #validating move
+                        legal = False
+                        legal_moves = self.get_legal_moves(self.__colour, pieces)
+                        for i in legal_moves: #if the move is in the list of legal moves for that piece
+                            if i == [self.__new_row, self.__new_column]:
+                                legal = True
+                        if legal:
+                            return (self.__new_row, self.__new_column) #if legal, let board move piece there
                         else:
-                            self.__rect.center = self.__original_pos #return piece to position before user moved it
+                            self.__rect.center = self.__original_pos #if illegal, return piece to position before user moved it
                     else:
                         not_on_a_square += 1
             if not_on_a_square == 64: #if user lets go of piece outside of chess board
