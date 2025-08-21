@@ -43,8 +43,32 @@ class Pawn(Piece):
         self.__can_promote = p_can_promote
 
     #other methods
-    def get_legal_moves(self):
-        None
+    def legal(self, colour, pieces):
+        friendly_fire = False
+        moving_forward = False
+        taking_diagonally = False
+
+        if colour == "white":
+            colour_factor = -1
+        else:
+            colour_factor = 1
+
+        if self.get_new_column() == self.get_column():
+            if self.get_new_row() == self.get_row() + colour_factor * 1:
+                if pieces[self.get_new_row()][self.get_new_column()] == None:
+                    self.__has_moved = True
+                    return True
+            elif self.get_new_row() == self.get_row() + colour_factor * 2 and self.__has_moved == False:
+                if pieces[self.get_new_row()][self.get_new_column()] == None and pieces[self.get_row() + colour_factor][self.get_column()] == None:
+                    self.__has_moved = True
+                    return True
+        elif self.get_new_row() == self.get_row() + colour_factor:
+            if self.get_new_column() == self.get_column() + 1 or self.get_new_column() == self.get_column() + -1:
+                if pieces[self.get_new_row()][self.get_new_column()] != None:
+                    if pieces[self.get_new_row()][self.get_new_column()].get_colour() != colour:
+                        return True
+
+
 
     def promote(self, new_piece):
         None
