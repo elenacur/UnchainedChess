@@ -111,9 +111,9 @@ class Rook(Piece):
                 if pieces[self.get_row() - i][self.get_column()] != None:
                     no_blockages = False
                     if pieces[self.get_row() - i][self.get_column()].get_colour() != colour:
-                        legal_moves.append([self.get_row() - i, self.get_column()])
+                        legal_moves.append([self.get_row() - i, self.get_column()]) #add move to list
                 else:
-                    legal_moves.append([self.get_row() - i, self.get_column()])
+                    legal_moves.append([self.get_row() - i, self.get_column()]) #add move to list
                 i += 1
                 if i == num_rows_up:
                     no_blockages = False
@@ -126,9 +126,9 @@ class Rook(Piece):
                 if pieces[self.get_row() + i][self.get_column()] != None:
                     no_blockages = False
                     if pieces[self.get_row() + i][self.get_column()].get_colour() != colour:
-                        legal_moves.append([self.get_row() + i, self.get_column()])
+                        legal_moves.append([self.get_row() + i, self.get_column()]) #add move to list
                 else:
-                    legal_moves.append([self.get_row() + i, self.get_column()])
+                    legal_moves.append([self.get_row() + i, self.get_column()]) #add move to list
                 i += 1
                 if i == num_rows_down:
                     no_blockages = False
@@ -141,9 +141,9 @@ class Rook(Piece):
                 if pieces[self.get_row()][self.get_column() - i] != None:
                     no_blockages = False
                     if pieces[self.get_row()][self.get_column() - i].get_colour() != colour:
-                        legal_moves.append([self.get_row(), self.get_column() - i])
+                        legal_moves.append([self.get_row(), self.get_column() - i]) #add move to list
                 else:
-                    legal_moves.append([self.get_row(), self.get_column() - i])
+                    legal_moves.append([self.get_row(), self.get_column() - i]) #add move to list
                 i += 1
                 if i == num_columns_left:
                     no_blockages = False
@@ -156,9 +156,9 @@ class Rook(Piece):
                 if pieces[self.get_row()][self.get_column() + i] != None:
                     no_blockages = False
                     if pieces[self.get_row()][self.get_column() + i].get_colour() != colour:
-                        legal_moves.append([self.get_row(), self.get_column() + i])
+                        legal_moves.append([self.get_row(), self.get_column() + i]) #add move to list
                 else:
-                    legal_moves.append([self.get_row(), self.get_column() + i])
+                    legal_moves.append([self.get_row(), self.get_column() + i]) #add move to list
                 i += 1
                 if i == num_columns_right:
                     no_blockages = False
@@ -240,9 +240,9 @@ class Bishop(Piece):
                 if pieces[self.get_row() - i][self.get_column() - i] != None:
                     no_blockages = False
                     if pieces[self.get_row() - i][self.get_column() - i].get_colour() != colour:
-                        legal_moves.append([self.get_row() - i, self.get_column() - i])
+                        legal_moves.append([self.get_row() - i, self.get_column() - i]) #add move to list
                 else:
-                    legal_moves.append([self.get_row() - i, self.get_column() - i])
+                    legal_moves.append([self.get_row() - i, self.get_column() - i]) #add move to list
                 i += 1
                 if i == num_rows_up or i == num_columns_left:
                     no_blockages = False
@@ -255,9 +255,9 @@ class Bishop(Piece):
                 if pieces[self.get_row() + i][self.get_column() - i] != None:
                     no_blockages = False
                     if pieces[self.get_row() + i][self.get_column() - i].get_colour() != colour:
-                        legal_moves.append([self.get_row() + i, self.get_column() - i])
+                        legal_moves.append([self.get_row() + i, self.get_column() - i]) #add move to list
                 else:
-                    legal_moves.append([self.get_row() + i, self.get_column() - i])
+                    legal_moves.append([self.get_row() + i, self.get_column() - i]) #add move to list
                 i += 1
                 if i == num_rows_down or i == num_columns_left:
                     no_blockages = False
@@ -270,9 +270,9 @@ class Bishop(Piece):
                 if pieces[self.get_row() - i][self.get_column() + i] != None:
                     no_blockages = False
                     if pieces[self.get_row() - i][self.get_column() + i].get_colour() != colour:
-                        legal_moves.append([self.get_row() - i, self.get_column() + i])
+                        legal_moves.append([self.get_row() - i, self.get_column() + i]) #add move to list
                 else:
-                    legal_moves.append([self.get_row() - i, self.get_column() + i])
+                    legal_moves.append([self.get_row() - i, self.get_column() + i]) #add move to list
                 i += 1
                 if i == num_rows_up or i == num_columns_right:
                     no_blockages = False
@@ -282,12 +282,12 @@ class Bishop(Piece):
         no_blockages = True
         if num_rows_down != 1 and num_columns_right != 1:
             while no_blockages:
-                if pieces[self.get_row() + 1][self.get_column() + i] != None:
+                if pieces[self.get_row() + i][self.get_column() + i] != None: #
                     no_blockages = False
-                    if pieces[self.get_row() + 1][self.get_column() + i].get_colour() != colour:
-                        legal_moves.append([self.get_row() + 1, self.get_column() + i])
+                    if pieces[self.get_row() + i][self.get_column() + i].get_colour() != colour:
+                        legal_moves.append([self.get_row() + i, self.get_column() + i]) #add move to list
                 else:
-                    legal_moves.append([self.get_row() + 1, self.get_column() + i])
+                    legal_moves.append([self.get_row() + i, self.get_column() + i]) #add move to list
                 i += 1
                 if i == num_rows_down or i == num_columns_right:
                     no_blockages = False
