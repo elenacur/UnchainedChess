@@ -43,31 +43,31 @@ class Pawn(Piece):
         self.__can_promote = p_can_promote
 
     #other methods
-    def legal(self, colour, pieces):
+    def get_legal_moves(self, colour, pieces):
+        legal_moves = []
+
 
         #pawns can only move in one direction depending on their colour
         if colour == "white":
             colour_factor = -1
         else:
             colour_factor = 1
+        
+        #moving 1 square forward
+        if pieces[self.get_row() + colour_factor][self.get_column()] == None:
+            legal_moves.append([self.get_row() + colour_factor, self.get_column()])
+            #moving 2 squares forward
+            if pieces[self.get_row() + (colour_factor * 2)][self.get_column()] == None and self.__has_moved == False:
+                legal_moves.append([self.get_row() + (colour_factor * 2), self.get_column()])
+                self.__has_moved = True
 
-        #moving forward
-        if self.get_new_column() == self.get_column():
-            if self.get_new_row() == self.get_row() + colour_factor * 1: #moving 1 square forward
-                if pieces[self.get_new_row()][self.get_new_column()] == None:
-                    self.__has_moved = True
-                    return True 
-            elif self.get_new_row() == self.get_row() + colour_factor * 2 and self.__has_moved == False: # moving 2 squares forward
-                if pieces[self.get_new_row()][self.get_new_column()] == None and pieces[self.get_row() + colour_factor][self.get_column()] == None:
-                    self.__has_moved = True
-                    return True
         #taking diagonally
-        elif self.get_new_row() == self.get_row() + colour_factor:
-            if self.get_new_column() == self.get_column() + 1 or self.get_new_column() == self.get_column() + -1:
-                if pieces[self.get_new_row()][self.get_new_column()] != None:
-                    if pieces[self.get_new_row()][self.get_new_column()].get_colour() != colour:
-                        return True
-
+        for i in range(-1, 2, 2): #-1 for left, 1 for right
+            if 0 <= (self.get_row() + colour_factor) <= 7 and 0 <= (self.get_column() + i) <= 7:
+                if pieces[self.get_row() + colour_factor][self.get_column() + i] != None:
+                    if pieces[self.get_row() + colour_factor][self.get_column() + i].get_colour() != colour:
+                        legal_moves.append([self.get_row() + colour_factor, self.get_column() + i])
+        return legal_moves
 
     def promote(self, new_piece):
         None
@@ -125,19 +125,18 @@ class Knight(Piece):
     #other methods
     def get_legal_moves(self, colour, pieces):
         legal_moves = []
-        friendly_fire = False #so it can't take a piece of the same colour
         knight_moves = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)] #ways a knight can move  
         for i in range(0, 8):
+            friendly_fire = False #so it can't take a piece of the same colour
             legal_row = self.get_row() + knight_moves[i][0]
             legal_column = self.get_column() + knight_moves[i][1]
-            if pieces[self.get_new_row()][self.get_new_column()] != None:
-                if pieces[self.get_new_row()][self.get_new_column()].get_colour() == colour: 
-                    friendly_fire = True
-
-            #adding this move to the legal_moves list if it's in range and isn't moving to a piece of the same colour
-            if 0 <= legal_row <= 7 and 0 <= legal_column <= 7 and friendly_fire == False:
-                legal_moves.append([legal_row, legal_column])
-        
+            if 0 <= legal_row <= 7 and 0 <= legal_column <= 7:
+                if pieces[legal_row][legal_column] != None:
+                    if pieces[legal_row][legal_column].get_colour() == colour: 
+                        friendly_fire = True
+                if friendly_fire == False:
+                    #adding this move to the legal_moves list if it's in range and isn't moving to a piece of the same colour
+                    legal_moves.append([legal_row, legal_column])
         return legal_moves
 
 #bishop
