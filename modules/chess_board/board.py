@@ -1,6 +1,11 @@
 #imports
 from modules.chess_board.square import Square
-from modules.chess_board.pieces.child_pieces import Pawn, Rook, Knight, Bishop, Queen, King
+from modules.chess_board.pieces.king import King
+from modules.chess_board.pieces.queen import Queen
+from modules.chess_board.pieces.rook import Rook
+from modules.chess_board.pieces.bishop import Bishop
+from modules.chess_board.pieces.knight import Knight
+from modules.chess_board.pieces.pawn import Pawn
 
 class Board():
 

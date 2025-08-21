@@ -1,7 +1,6 @@
 #imports
 import pygame
 from modules.chess_board.board import Board
-from modules.chess_board.pieces.child_pieces import Pawn
 
 pygame.init()
 

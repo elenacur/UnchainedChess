@@ -111,6 +111,148 @@ class Piece():
         legal_moves = None
         return legal_moves
     
+    def get_legal_rook_moves(self, colour, pieces):
+        legal_moves = []    
+
+        #columns/rows on each of its sides + 1
+        num_columns_left = self.get_column() + 1
+        num_columns_right = 8 - self.get_column()
+        num_rows_up = self.get_row() + 1
+        num_rows_down = 8 - self.get_row()
+
+        #checking up
+        i = 1
+        no_blockages = True
+        if num_rows_up != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row() - i][self.get_column()] != None:
+                    no_blockages = False
+                    if pieces[self.get_row() - i][self.get_column()].get_colour() != colour:
+                        legal_moves.append([self.get_row() - i, self.get_column()]) #add move to list
+                else:
+                    legal_moves.append([self.get_row() - i, self.get_column()]) #add move to list
+                i += 1 #to loop through row
+                if i == num_rows_up:
+                    no_blockages = False
+        
+        #checking down
+        i = 1
+        no_blockages = True
+        if num_rows_down != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row() + i][self.get_column()] != None:
+                    no_blockages = False
+                    if pieces[self.get_row() + i][self.get_column()].get_colour() != colour:
+                        legal_moves.append([self.get_row() + i, self.get_column()]) #add move to list
+                else:
+                    legal_moves.append([self.get_row() + i, self.get_column()]) #add move to list
+                i += 1 #to loop through row
+                if i == num_rows_down:
+                    no_blockages = False
+        
+        #checking left
+        i = 1
+        no_blockages = True
+        if num_columns_left != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row()][self.get_column() - i] != None:
+                    no_blockages = False
+                    if pieces[self.get_row()][self.get_column() - i].get_colour() != colour:
+                        legal_moves.append([self.get_row(), self.get_column() - i]) #add move to list
+                else:
+                    legal_moves.append([self.get_row(), self.get_column() - i]) #add move to list
+                i += 1 #to loop through column
+                if i == num_columns_left:
+                    no_blockages = False
+        
+        #checking right
+        i = 1
+        no_blockages = True
+        if num_columns_right != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row()][self.get_column() + i] != None:
+                    no_blockages = False
+                    if pieces[self.get_row()][self.get_column() + i].get_colour() != colour:
+                        legal_moves.append([self.get_row(), self.get_column() + i]) #add move to list
+                else:
+                    legal_moves.append([self.get_row(), self.get_column() + i]) #add move to list
+                i += 1 #to loop through column
+                if i == num_columns_right:
+                    no_blockages = False
+
+        return legal_moves
+    
+    def get_legal_bishop_moves(self, colour, pieces):
+        legal_moves = []
+
+        #columns/rows on each of its sides + 1
+        num_columns_left = self.get_column() + 1
+        num_columns_right = 8 - self.get_column()
+        num_rows_up = self.get_row() + 1
+        num_rows_down = 8 - self.get_row()
+
+        #checking top left
+        i = 1
+        no_blockages = True
+        if num_rows_up != 1 and num_columns_left != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row() - i][self.get_column() - i] != None:
+                    no_blockages = False
+                    if pieces[self.get_row() - i][self.get_column() - i].get_colour() != colour:
+                        legal_moves.append([self.get_row() - i, self.get_column() - i]) #add move to list
+                else:
+                    legal_moves.append([self.get_row() - i, self.get_column() - i]) #add move to list
+                i += 1 #to loop through diagonal
+                if i == num_rows_up or i == num_columns_left:
+                    no_blockages = False
+        
+        #checking bottom left
+        i = 1
+        no_blockages = True
+        if num_rows_down != 1 and num_columns_left != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row() + i][self.get_column() - i] != None:
+                    no_blockages = False
+                    if pieces[self.get_row() + i][self.get_column() - i].get_colour() != colour:
+                        legal_moves.append([self.get_row() + i, self.get_column() - i]) #add move to list
+                else:
+                    legal_moves.append([self.get_row() + i, self.get_column() - i]) #add move to list
+                i += 1 #to loop through diagonal
+                if i == num_rows_down or i == num_columns_left:
+                    no_blockages = False
+        
+        #checking top right
+        i = 1
+        no_blockages = True
+        if num_rows_up != 1 and num_columns_right != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row() - i][self.get_column() + i] != None:
+                    no_blockages = False
+                    if pieces[self.get_row() - i][self.get_column() + i].get_colour() != colour:
+                        legal_moves.append([self.get_row() - i, self.get_column() + i]) #add move to list
+                else:
+                    legal_moves.append([self.get_row() - i, self.get_column() + i]) #add move to list
+                i += 1 #to loop through diagonal
+                if i == num_rows_up or i == num_columns_right:
+                    no_blockages = False
+        
+        #checking right
+        i = 1
+        no_blockages = True
+        if num_rows_down != 1 and num_columns_right != 1: #if at an edge
+            while no_blockages:
+                if pieces[self.get_row() + i][self.get_column() + i] != None: 
+                    no_blockages = False
+                    if pieces[self.get_row() + i][self.get_column() + i].get_colour() != colour:
+                        legal_moves.append([self.get_row() + i, self.get_column() + i]) #add move to list
+                else:
+                    legal_moves.append([self.get_row() + i, self.get_column() + i]) #add move to list
+                i += 1 #to loop through diagonal
+                if i == num_rows_down or i == num_columns_right:
+                    no_blockages = False
+
+        return legal_moves
+    
     def remove(self):
         None
 
