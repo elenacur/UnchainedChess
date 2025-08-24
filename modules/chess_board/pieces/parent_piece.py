@@ -1,5 +1,6 @@
 #imports
 import pygame
+import copy
 
 class Piece():
 
@@ -91,7 +92,7 @@ class Piece():
         self.__is_moving = p_is_moving
 
     def set_original_pos(self, p_original_pos):
-        self.__is_moving = p_original_pos
+        self.__original_pos = p_original_pos
 
     def set_value(self, p_value):
         self.__value = p_value
@@ -107,8 +108,8 @@ class Piece():
 
 
     #other methods
-    def get_legal_moves(self):
-        legal_moves = None
+    def get_legal_moves(self, colour, pieces):
+        legal_moves = []
         return legal_moves
     
     def get_legal_rook_moves(self, colour, pieces):
@@ -256,6 +257,45 @@ class Piece():
     def remove(self):
         None
 
+    def in_check(self, king_colour, pieces):
+        #finding position of the king
+        king_pos = None
+        for i in range(0, 8):
+            for j in range(0, 8):
+                piece = pieces[i][j]
+                if piece != None:
+                    if piece.get_name() == "king" and piece.get_colour() == king_colour:
+                        king_pos = [i, j]
+                        break
+            if king_pos != None:
+                break
+
+        if king_pos == None:
+            return False  #in case there's no king on the board
+
+        #seeing if an opponent piece can legally move to square king is on
+        for list in pieces:
+            for piece in list:
+                if piece != None:
+                    if piece.get_colour() != king_colour:
+                        enemy_moves = piece.get_legal_moves(piece.get_colour(), pieces)
+                        for i in enemy_moves:
+                            if i == king_pos:
+                                return True #return true if it can
+        return False
+
+    #for making copies of Piece objects
+    def clone(self):  
+        the_class = self.__class__
+
+        return the_class(
+            board = None,  #don't need the list of squares
+            colour = self.__colour,
+            taken = self.__taken,
+            row = self.__row,
+            column = self.__column,
+            size = self.__size)
+
     def draw_piece(self, screen):
         #create a rect that is the image's size and position, put this rect at the centre of self.__rect
         screen.blit(self.__image, self.__image.get_rect(center=self.__rect.center)) #blit image and rect
@@ -266,13 +306,15 @@ class Piece():
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.__rect.collidepoint(pos): #if user left clicks on piece's rect
                 self.__is_moving = True
-                self.__original_pos = self.__rect.center 
-    
+                self.__original_pos = self.__rect.center
+   
         if event.type == pygame.MOUSEMOTION and self.__is_moving == True: #if user moves mouse after clicking on piece rect
             self.__rect.center = pos #update position of rect's centre to position of mouse
 
+
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and self.__is_moving == True: #if user stops holding down left click
             self.__is_moving = False #stop moving rect
+
 
             #moving piece to centre of square the user drops the rect on
             not_on_a_square = 0
@@ -285,21 +327,48 @@ class Piece():
                         self.__new_row = square.get_row()
                         self.__new_column = square.get_column()
 
-                        #validating move
+                        #checking if move is legal
                         legal = False
                         legal_moves = self.get_legal_moves(self.__colour, pieces)
-                        for i in legal_moves: #if the move is in the list of legal moves for that piece
-                            if i == [self.__new_row, self.__new_column]:
+                        for i in legal_moves:
+                            if i == [self.__new_row, self.__new_column]: #if the move is in the list of legal moves for that piece
                                 legal = True
+
+                        #making sure the move doesn't put the piece's own king in check
                         if legal:
-                            return (self.__new_row, self.__new_column) #if legal, let board move piece there
+                            #copying current board position
+                            pieces_copy = clone_board(pieces)
+
+                            #simulating the move in the copy
+                            pieces_copy[self.__new_row][self.__new_column] = pieces_copy[self.__row][self.__column]
+                            pieces_copy[self.__row][self.__column] = None
+                            pieces_copy[self.__new_row][self.__new_column].set_row(self.__new_row)
+                            pieces_copy[self.__new_row][self.__new_column].set_column(self.__new_column)
+
+                            if not self.in_check(self.__colour, pieces_copy): #if own king not in check
+                                return (self.__new_row, self.__new_column) #if legal, let board move piece
+                            else:
+                                self.__rect.center = self.__original_pos #own king is in check so return piece to position before user moved it
                         else:
-                            self.__rect.center = self.__original_pos #if illegal, return piece to position before user moved it
+                            self.__rect.center = self.__original_pos #illegal move so return piece to position before user moved it
                     else:
                         not_on_a_square += 1
             if not_on_a_square == 64: #if user lets go of piece outside of chess board
                 self.__rect.center = self.__original_pos #return piece to position before user moved it
 
-
-
-
+#putting all the copies of objects into their own replica board
+def clone_board(pieces):
+    replica_board = [[None, None, None, None, None, None, None, None], 
+                [None, None, None, None, None, None, None, None], 
+                [None, None, None, None, None, None, None, None], 
+                [None, None, None, None, None, None, None, None], 
+                [None, None, None, None, None, None, None, None], 
+                [None, None, None, None, None, None, None, None], 
+                [None, None, None, None, None, None, None, None], 
+                [None, None, None, None, None, None, None, None]]
+    for i in range(0, 8):
+        for j in range(0, 8):
+            piece = pieces[i][j]
+            if piece != None:
+                replica_board[i][j] = piece.clone() #adding a clone of the piece to its position in clone of board
+    return replica_board

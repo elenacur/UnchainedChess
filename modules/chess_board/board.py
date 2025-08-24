@@ -30,6 +30,8 @@ class Board():
         self.__game_over = game_over
         self.__white_points = 0
         self.__black_points = 0
+        self.__white_king_pos = None
+        self.__black_king_pos = None
 
         #putting Square objects in the board array, alternating black and white
         white = True
@@ -68,6 +70,12 @@ class Board():
     def get_black_points(self):
         return self.__black_points
     
+    def get_white_king_pos(self):
+        return self.__white_king_pos
+    
+    def get_black_king_pos(self):
+        return self.__black_king_pos
+    
     #setters
     def set_board(self, p_board):
         self.__board = p_board
@@ -92,6 +100,12 @@ class Board():
 
     def set_black_points(self, p_black_points):
         self.__black_points = p_black_points
+
+    def set_white_king_pos(self, p_white_king_pos):
+        self.__white_king_pos = p_white_king_pos
+
+    def set_black_king_pos(self, p_black_king_pos):
+        self.__black_king_pos = p_black_king_pos
 
     #other methods
     def reset_board(self): #filling pieces array with Piece objects in order of chess starting position
@@ -127,12 +141,9 @@ class Board():
 
         #kings
         self.__pieces[0][4] = King(self, "black", False, 0, 4, 84)
+        self.__black_king_pos = [0, 4]
         self.__pieces[7][4] = King(self, "white", False, 7, 4, 84)
-    
-    def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
-        for i in self.__board:
-            for j in i:
-                j.draw_square(screen)
+        self.__white_king_pos = [7, 4]
     
     def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
         for i in self.__board:
@@ -149,9 +160,9 @@ class Board():
         for list in self.__pieces:
             for piece in list:
                 if piece != None:
-
-                    #updating piece array and piece attributes
                     returned_values = piece.move(event, pos, self.__pieces)
+                    
+                    #updating piece array and piece attributes
                     if returned_values != None:
                         new_row, new_column = returned_values
                         self.set_pieces(None, piece.get_row(), piece.get_column()) 
@@ -182,7 +193,5 @@ class Board():
         screen.blit(text.render(white_points_str, True, "black"), (100, 100))
         screen.blit(text.render(black_points_str, True, "black"), (50, 100))
 
-            
+    
 
-
-        
