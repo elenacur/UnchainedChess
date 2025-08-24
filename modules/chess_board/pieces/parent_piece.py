@@ -302,7 +302,7 @@ class Piece():
         #pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
 
     #allows user to move the piece's rect
-    def move(self, event, pos, pieces):
+    def move(self, event, pos, pieces, whites_turn):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.__rect.collidepoint(pos): #if user left clicks on piece's rect
                 self.__is_moving = True
@@ -328,11 +328,27 @@ class Piece():
                         self.__new_column = square.get_column()
 
                         #checking if move is legal
+                        
+                        #is it that colour's turn
+                        correct_colour = False
+                        if whites_turn:
+                            if self.__colour == "white":
+                                correct_colour = True
+                        else:
+                            if self.__colour == "black":
+                                correct_colour = True
+
+                        #temp code for testing
+                        if correct_colour == False:
+                            print("it's not this player's turn")
+
+                        #does the move abide that piece's rules
                         legal = False
-                        legal_moves = self.get_legal_moves(self.__colour, pieces)
-                        for i in legal_moves:
-                            if i == [self.__new_row, self.__new_column]: #if the move is in the list of legal moves for that piece
-                                legal = True
+                        if correct_colour: 
+                            legal_moves = self.get_legal_moves(self.__colour, pieces)
+                            for i in legal_moves:
+                                if i == [self.__new_row, self.__new_column]: #if the move is in the list of legal moves for that piece
+                                    legal = True
 
                         #making sure the move doesn't put the piece's own king in check
                         if legal:
@@ -349,6 +365,7 @@ class Piece():
                                 return (self.__new_row, self.__new_column) #if legal, let board move piece
                             else:
                                 self.__rect.center = self.__original_pos #own king is in check so return piece to position before user moved it
+                                print("illegal- your king is in check") #temp code for testing
                         else:
                             self.__rect.center = self.__original_pos #illegal move so return piece to position before user moved it
                     else:

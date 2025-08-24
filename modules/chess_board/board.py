@@ -160,7 +160,7 @@ class Board():
         for list in self.__pieces:
             for piece in list:
                 if piece != None:
-                    returned_values = piece.move(event, pos, self.__pieces)
+                    returned_values = piece.move(event, pos, self.__pieces, self.__whites_turn)
                     
                     #updating piece array and piece attributes
                     if returned_values != None:
@@ -170,6 +170,7 @@ class Board():
                         piece.set_row(new_row)
                         piece.set_column(new_column)
                         self.set_pieces(piece, new_row, new_column)
+                        self.__whites_turn = not self.__whites_turn
 
     def print_pieces(self): #prints the current board position in terminal
         for list in self.__pieces:
