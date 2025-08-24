@@ -295,6 +295,44 @@ class Piece():
             row = self.__row,
             column = self.__column,
             size = self.__size)
+    
+    #for checking if move is legal
+    def check_if_legal(self, whites_turn, pieces):
+                        
+        #is it that colour's turn
+        correct_colour = False
+        if whites_turn:
+            if self.__colour == "white":
+                correct_colour = True
+        else:
+            if self.__colour == "black":
+                correct_colour = True
+
+        #does the move abide that piece's rules
+        abides_move_rules = False
+        if correct_colour: 
+            legal_moves = self.get_legal_moves(self.__colour, pieces)
+            for i in legal_moves:
+                if i == [self.__new_row, self.__new_column]: #if the move is in the list of legal moves for that piece
+                    abides_move_rules = True
+
+        #making sure the move doesn't put the piece's own king in check
+        if abides_move_rules:
+            #copying current board position
+            pieces_copy = clone_board(pieces)
+
+            #simulating the move in the copy
+            pieces_copy[self.__new_row][self.__new_column] = pieces_copy[self.__row][self.__column]
+            pieces_copy[self.__row][self.__column] = None
+            pieces_copy[self.__new_row][self.__new_column].set_row(self.__new_row)
+            pieces_copy[self.__new_row][self.__new_column].set_column(self.__new_column)
+
+            if not self.in_check(self.__colour, pieces_copy): #if own king not in check
+                return True #if legal, return True
+            else:
+                return False #own king is in check so return False
+        else:
+            return False #illegal move so return False
 
     def draw_piece(self, screen):
         #create a rect that is the image's size and position, put this rect at the centre of self.__rect
@@ -327,47 +365,13 @@ class Piece():
                         self.__new_row = square.get_row()
                         self.__new_column = square.get_column()
 
-                        #checking if move is legal
-                        
-                        #is it that colour's turn
-                        correct_colour = False
-                        if whites_turn:
-                            if self.__colour == "white":
-                                correct_colour = True
-                        else:
-                            if self.__colour == "black":
-                                correct_colour = True
-
-                        #temp code for testing
-                        if correct_colour == False:
-                            print("it's not this player's turn")
-
-                        #does the move abide that piece's rules
-                        legal = False
-                        if correct_colour: 
-                            legal_moves = self.get_legal_moves(self.__colour, pieces)
-                            for i in legal_moves:
-                                if i == [self.__new_row, self.__new_column]: #if the move is in the list of legal moves for that piece
-                                    legal = True
-
-                        #making sure the move doesn't put the piece's own king in check
+                        #check if move is legal
+                        legal = self.check_if_legal(whites_turn, pieces)
                         if legal:
-                            #copying current board position
-                            pieces_copy = clone_board(pieces)
-
-                            #simulating the move in the copy
-                            pieces_copy[self.__new_row][self.__new_column] = pieces_copy[self.__row][self.__column]
-                            pieces_copy[self.__row][self.__column] = None
-                            pieces_copy[self.__new_row][self.__new_column].set_row(self.__new_row)
-                            pieces_copy[self.__new_row][self.__new_column].set_column(self.__new_column)
-
-                            if not self.in_check(self.__colour, pieces_copy): #if own king not in check
-                                return (self.__new_row, self.__new_column) #if legal, let board move piece
-                            else:
-                                self.__rect.center = self.__original_pos #own king is in check so return piece to position before user moved it
-                                print("illegal- your king is in check") #temp code for testing
+                            return (self.__new_row, self.__new_column) #if legal, let board move piece
                         else:
                             self.__rect.center = self.__original_pos #illegal move so return piece to position before user moved it
+                    
                     else:
                         not_on_a_square += 1
             if not_on_a_square == 64: #if user lets go of piece outside of chess board
