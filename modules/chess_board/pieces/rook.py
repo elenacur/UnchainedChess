@@ -10,7 +10,6 @@ class Rook(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("rook", board, colour, taken, row, column, size) #initialising parent class
-        self.__has_moved = False #for castling
         self.set_value(5)
 
         if self.get_colour() == "white": #assigning different images based on colour
@@ -21,12 +20,8 @@ class Rook(Piece):
         self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
 
     #getters
-    def get_has_moved(self):
-        return self.__has_moved
     
     #setters
-    def set_has_moved(self, p_has_moved):
-        self.__has_moved = p_has_moved
 
     #other methods
     def get_legal_moves(self, colour, pieces):

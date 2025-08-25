@@ -12,7 +12,6 @@ class King(Piece):
         super().__init__("king", board, colour, taken, row, column, size) #initialising parent class
         self.__checked = False #for legal moves
         self.__checkmated = False #for ending the game
-        self.__has_moved = False #for castling
         self.__can_move = False #for stalemates
         self.set_value(0) #kings do not have a value
 
@@ -30,9 +29,6 @@ class King(Piece):
     def get_checkmated(self):
         return self.__checkmated
 
-    def get_has_moved(self):
-        return self.__has_moved
-
     def get_can_move(self):
         return self.__can_move
 
@@ -42,9 +38,6 @@ class King(Piece):
 
     def set_checkmated(self, p_checkmated):
         self.__checkmated = p_checkmated
-
-    def set_has_moved(self, p_has_moved):
-        self.__has_moved = p_has_moved
 
     def set_can_move(self, p_can_move):
         self.__can_move = p_can_move

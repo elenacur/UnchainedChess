@@ -165,12 +165,16 @@ class Board():
                     #updating piece array and piece attributes
                     if returned_values != None:
                         new_row, new_column = returned_values
-                        self.set_pieces(None, piece.get_row(), piece.get_column()) 
-                        self.update_points(self.get_pieces(new_row, new_column)) #updates points
+                        self.set_pieces(None, piece.get_row(), piece.get_column())
                         piece.set_row(new_row)
                         piece.set_column(new_column)
                         self.set_pieces(piece, new_row, new_column)
-                        self.__whites_turn = not self.__whites_turn
+                        self.update_points(self.get_pieces(new_row, new_column)) #updates points
+
+                        if piece.get_has_moved() == False: #piece has now moved
+                            piece.set_has_moved(True)
+
+                        self.__whites_turn = not self.__whites_turn #other player's turn now
 
     def print_pieces(self): #prints the current board position in terminal
         for list in self.__pieces:

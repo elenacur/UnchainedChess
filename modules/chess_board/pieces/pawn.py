@@ -10,7 +10,6 @@ class Pawn(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("pawn", board, colour, taken, row, column, size) #initialising parent class
-        self.__has_moved = False #for checking if pawn can move two squares
         self.__en_passant = False #for en passant
         self.__can_promote = False #for promoting
         self.set_value(1)
@@ -23,9 +22,6 @@ class Pawn(Piece):
         self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
 
     #getters
-    def get_has_moved(self):
-        return self.__has_moved
-
     def get_en_passant(self):
         return self.__en_passant
 
@@ -33,9 +29,6 @@ class Pawn(Piece):
         return self.__can_promote
     
     #setters
-    def set_has_moved(self, p_has_moved):
-        self.__has_moved = p_has_moved
-
     def set_en_passant(self, p_en_passant):
         self.__en_passant = p_en_passant
 
@@ -56,9 +49,8 @@ class Pawn(Piece):
         if pieces[self.get_row() + colour_factor][self.get_column()] == None:
             legal_moves.append([self.get_row() + colour_factor, self.get_column()])
             #moving 2 squares forward
-            if pieces[self.get_row() + (colour_factor * 2)][self.get_column()] == None and self.__has_moved == False:
+            if pieces[self.get_row() + (colour_factor * 2)][self.get_column()] == None and self.get_has_moved() == False:
                 legal_moves.append([self.get_row() + (colour_factor * 2), self.get_column()])
-                self.__has_moved = True
 
         #taking diagonally
         for i in range(-1, 2, 2): #-1 for left, 1 for right

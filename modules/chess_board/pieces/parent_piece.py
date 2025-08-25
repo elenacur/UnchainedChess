@@ -19,6 +19,7 @@ class Piece():
         self.__value = None
         self.__new_row = None
         self.__new_column = None
+        self.__has_moved = False #for rook, king and pawn rules
         #creating rect that's same size and position as given square and correct perspective
         self.__rect = pygame.Rect(self.__column * self.__size + 210, self.__row * self.__size + 70, 
                             self.__size, self.__size) 
@@ -62,6 +63,9 @@ class Piece():
     
     def get_new_column(self):
         return self.__new_column
+    
+    def get_has_moved(self):
+        return self.__has_moved
 
     def get_rect(self):
         return self.__rect
@@ -102,6 +106,9 @@ class Piece():
 
     def set_new_column(self, p_new_column):
         self.__new_column = p_new_column
+
+    def set_has_moved(self, p_has_moved):
+        self.__has_moved = p_has_moved
 
     def set_rect(self, p_rect):
         self.__rect = p_rect
