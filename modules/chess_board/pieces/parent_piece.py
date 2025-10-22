@@ -1,6 +1,5 @@
 #imports
 import pygame
-import copy
 
 class Piece():
 
@@ -305,6 +304,11 @@ class Piece():
     
     #for checking if move is legal
     def check_if_legal(self, whites_turn, pieces):
+        trying_to_castle = False
+        castling_type = None
+        castling_through_check = False
+        castling = [None, None]
+        castling_rook = None
                         
         #is it that colour's turn
         correct_colour = False
@@ -322,11 +326,57 @@ class Piece():
             for i in legal_moves:
                 if i == [self.__new_row, self.__new_column]: #if the move is in the list of legal moves for that piece
                     abides_move_rules = True
+                    
+                    #if user is trying to make king castle
+                    if self.__name == "king":
+                        if [self.__new_row, self.__new_column] == [self.__row, self.__column + 2]:
+                            castling_type = "king_side"
+                            trying_to_castle = True
+
+                            #checking if rook has moved
+                            if self.__colour == "white":
+                                castling_rook = pieces[7][7]
+                                if castling_rook.get_has_moved() == True:
+                                    abides_move_rules = False
+                            else:
+                                castling_rook = pieces[0][7]
+                                if castling_rook.get_has_moved() == True:
+                                    abides_move_rules = False
+
+                        elif [self.__new_row, self.__new_column] == [self.__row, self.__column - 2]:
+                            castling_type = "queen_side"
+                            trying_to_castle = True
+
+                            #checking if rook has moved
+                            if self.__colour == "white":
+                                castling_rook = pieces[7][0]
+                                if castling_rook.get_has_moved() == True:
+                                    abides_move_rules = False
+                            else:
+                                castling_rook = pieces[0][0]
+                                if castling_rook.get_has_moved() == True:
+                                    abides_move_rules = False
 
         #making sure the move doesn't put the piece's own king in check
         if abides_move_rules:
             #copying current board position
             pieces_copy = clone_board(pieces)
+
+            #simulating castling and validating it if user is trying to castle
+            if trying_to_castle:
+                if castling_type == "king_side":
+                    column_change = 1
+                else:
+                    column_change = -1
+                pieces_copy[self.__row][self.__column + column_change] = pieces_copy[self.__row][self.__column]
+                pieces_copy[self.__row][self.__column] = None
+                pieces_copy[self.__row][self.__column + column_change].set_column(self.__column + column_change)
+                if self.in_check(self.__colour, pieces_copy):
+                    castling_through_check = True
+                    print("you're trying to castle through check") #for testing
+
+                #resetting pieces_copy
+                pieces_copy = clone_board(pieces)
 
             #simulating the move in the copy
             pieces_copy[self.__new_row][self.__new_column] = pieces_copy[self.__row][self.__column]
@@ -334,12 +384,13 @@ class Piece():
             pieces_copy[self.__new_row][self.__new_column].set_row(self.__new_row)
             pieces_copy[self.__new_row][self.__new_column].set_column(self.__new_column)
 
-            if not self.in_check(self.__colour, pieces_copy): #if own king not in check
-                return True #if legal, return True
+            if not self.in_check(self.__colour, pieces_copy) and not castling_through_check: #if own king not in check nor castles through check
+                castling = [castling_type, castling_rook]
+                return True, castling #if legal, return True
             else:
-                return False #own king is in check so return False
+                return False, [None, None] #own king is in check so return False
         else:
-            return False #illegal move so return False
+            return False, [None, None] #illegal move so return False
 
     def draw_piece(self, screen):
         #create a rect that is the image's size and position, put this rect at the centre of self.__rect
@@ -373,16 +424,17 @@ class Piece():
                         self.__new_column = square.get_column()
 
                         #check if move is legal
-                        legal = self.check_if_legal(whites_turn, pieces)
+                        legal, castling = self.check_if_legal(whites_turn, pieces)
                         if legal:
-                            return (self.__new_row, self.__new_column) #if legal, let board move piece
+                            return (self.__new_row, self.__new_column), castling #if legal, let board move piece
                         else:
                             self.__rect.center = self.__original_pos #illegal move so return piece to position before user moved it
-                    
+                        
                     else:
                         not_on_a_square += 1
             if not_on_a_square == 64: #if user lets go of piece outside of chess board
                 self.__rect.center = self.__original_pos #return piece to position before user moved it
+        return None, [None, None]
 
 #putting all the copies of objects into their own replica board
 def clone_board(pieces):

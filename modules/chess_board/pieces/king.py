@@ -57,4 +57,16 @@ class King(Piece):
                 if friendly_fire == False:
                     #adding this move to the legal_moves list if it's in range and isn't moving to a piece of the same colour
                     legal_moves.append([legal_row, legal_column])
+
+        if self.get_has_moved() == False:
+            #making sure no pieces are blocking the castling
+            if 0 <= self.get_column() - 3 <= 7 and 0 <= self.get_column() + 2 <= 7:
+                if pieces[self.get_row()][self.get_column() + 1] == None: #if no blockage
+                    if pieces[self.get_row()][self.get_column() + 2] == None: #if king not going on a piece
+                        legal_moves.append([self.get_row(), self.get_column() + 2]) #king side castling allowed
+
+                if pieces[self.get_row()][self.get_column() - 1] == None: #if no blockage
+                    if pieces[self.get_row()][self.get_column() - 2] == None: #if king not going on a piece
+                        if pieces[self.get_row()][self.get_column() - 3] == None: #checking extra queen side square
+                            legal_moves.append([self.get_row(), self.get_column() - 2]) #queen side castling allowed
         return legal_moves

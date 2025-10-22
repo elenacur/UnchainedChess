@@ -160,21 +160,37 @@ class Board():
         for list in self.__pieces:
             for piece in list:
                 if piece != None:
-                    returned_values = piece.move(event, pos, self.__pieces, self.__whites_turn)
+                    returned_values, castling = piece.move(event, pos, self.__pieces, self.__whites_turn)
                     
                     #updating piece array and piece attributes
                     if returned_values != None:
                         new_row, new_column = returned_values
+
+                        #updating piece that was moved by user
+                        captured_piece = self.__pieces[new_row][new_column]
                         self.set_pieces(None, piece.get_row(), piece.get_column())
                         piece.set_row(new_row)
                         piece.set_column(new_column)
                         self.set_pieces(piece, new_row, new_column)
-                        self.update_points(self.get_pieces(new_row, new_column)) #updates points
 
-                        if piece.get_has_moved() == False: #piece has now moved
+                        self.update_points(captured_piece) #updates points
+
+                        if piece.get_has_moved() == False: #piece has now moved so need to update this attribute
                             piece.set_has_moved(True)
+                        
+                        #checking if a pawn has been promoted
+                        if piece.get_name() == "pawn":
+                            if (piece.get_colour() == "white" and new_row == 0) or (piece.get_colour() == "black" and new_row == 7):
+                                piece.set_can_promote(True)
+                                choice = piece.promote()
+                                self.promote_pawn(piece, choice)
+
 
                         self.__whites_turn = not self.__whites_turn #other player's turn now
+
+                        #updating rook if castling is occurring
+                        if castling[0] != None:
+                            self.castle(castling, new_column)
 
     def print_pieces(self): #prints the current board position in terminal
         for list in self.__pieces:
@@ -197,6 +213,41 @@ class Board():
         black_points_str = str(self.__black_points)
         screen.blit(text.render(white_points_str, True, "black"), (100, 100))
         screen.blit(text.render(black_points_str, True, "black"), (50, 100))
+
+    def castle(self, castling, new_column):
+        self.set_pieces(None, castling[1].get_row(), castling[1].get_column())
+
+        if castling[0] == "king_side":
+            new_rook_column = new_column - 1 #rook is on left of king
+        elif castling[0] == "queen_side":
+            new_rook_column = new_column + 1 #rook is on right of king
+
+        castling[1].set_column(new_rook_column)
+        castling[1].get_rect().center = self.__board[castling[1].get_row()][castling[1].get_column()].get_rect().center
+        self.set_pieces(castling[1], castling[1].get_row(), new_rook_column)
+
+        if castling[1].get_has_moved() == False:
+            castling[1].set_has_moved(True)
+    
+    #replaces pawn with piece of user's choice
+    def promote_pawn(self, pawn, choice):
+        
+        row = pawn.get_row()
+        column = pawn.get_column()
+        colour = pawn.get_colour()
+        size = pawn.get_size()
+
+        if choice == "queen":
+            new_piece = Queen(self, colour, False, row, column, size)
+        elif choice == "rook":
+            new_piece = Rook(self, colour, False, row, column, size)
+        elif choice == "bishop":
+            new_piece = Bishop(self, colour, False, row, column, size)
+        elif choice == "knight":
+            new_piece = Knight(self, colour, False, row, column, size) 
+
+        self.set_pieces(new_piece, row, column)
+
 
     
 
