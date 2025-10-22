@@ -32,6 +32,7 @@ class Board():
         self.__black_points = 0
         self.__white_king_pos = None
         self.__black_king_pos = None
+        self.__free_mode = False
 
         #putting Square objects in the board array, alternating black and white
         white = True
@@ -76,6 +77,9 @@ class Board():
     def get_black_king_pos(self):
         return self.__black_king_pos
     
+    def get_free_mode(self):
+        return self.__free_mode
+    
     #setters
     def set_board(self, p_board):
         self.__board = p_board
@@ -106,6 +110,9 @@ class Board():
 
     def set_black_king_pos(self, p_black_king_pos):
         self.__black_king_pos = p_black_king_pos
+
+    def set_free_mode(self, p_free_mode):
+        self.__free_mode = p_free_mode
 
     #other methods
     def reset_board(self): #filling pieces array with Piece objects in order of chess starting position
@@ -160,7 +167,7 @@ class Board():
         for list in self.__pieces:
             for piece in list:
                 if piece != None:
-                    returned_values, castling = piece.move(event, pos, self.__pieces, self.__whites_turn)
+                    returned_values, castling = piece.move(event, pos, self.__pieces, self.__whites_turn, self.__free_mode)
                     
                     #updating piece array and piece attributes
                     if returned_values != None:

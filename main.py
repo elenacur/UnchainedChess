@@ -1,6 +1,7 @@
 #imports
 import pygame
 from modules.chess_board.board import Board
+from modules.user_interface.free_mode_button import FreeModeButton
 
 pygame.init()
 
@@ -12,9 +13,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 default_text = pygame.font.SysFont("Arial", 30)
 
-#instantiating board
+#instantiating objects
 board = Board(84, "", True, 0, False)
 board.reset_board()
+free_mode_button = FreeModeButton(1100, 350, 100, 100, None, pygame.image.load("assets/button_images/red-free-mode-button.png"))
+
 
 run = True
 while run == True: #game loop
@@ -22,7 +25,11 @@ while run == True: #game loop
   screen.fill((217, 210, 233)) #background colour
   pos = pygame.mouse.get_pos() #getting position of the mouse
 
-  #drawing objects onto the screen
+  #drawing user_interface objects onto the screen
+  free_mode_button.draw(screen)
+  free_mode_button.check_if_clicked(board)
+
+  #drawing chess_board objects onto the screen
   board.draw_whole_board(screen)
   board.draw_all_pieces(screen)
   board.draw_points(screen, default_text)

@@ -373,7 +373,7 @@ class Piece():
                 pieces_copy[self.__row][self.__column + column_change].set_column(self.__column + column_change)
                 if self.in_check(self.__colour, pieces_copy):
                     castling_through_check = True
-                    print("you're trying to castle through check") #for testing
+                    #print("you're trying to castle through check") #for testing
 
                 #resetting pieces_copy
                 pieces_copy = clone_board(pieces)
@@ -398,7 +398,7 @@ class Piece():
         #pygame.draw.rect(screen, (255, 0, 0), self.__rect, 2) #temporary outline for testing
 
     #allows user to move the piece's rect
-    def move(self, event, pos, pieces, whites_turn):
+    def move(self, event, pos, pieces, whites_turn, free_mode):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.__rect.collidepoint(pos): #if user left clicks on piece's rect
                 self.__is_moving = True
@@ -425,10 +425,15 @@ class Piece():
 
                         #check if move is legal
                         legal, castling = self.check_if_legal(whites_turn, pieces)
-                        if legal:
-                            return (self.__new_row, self.__new_column), castling #if legal, let board move piece
-                        else:
-                            self.__rect.center = self.__original_pos #illegal move so return piece to position before user moved it
+
+                        if free_mode == True: #always let piece move in free mode
+                            return (self.__new_row, self.__new_column), castling
+                        
+                        else: #when not in free mode
+                            if legal:
+                                return (self.__new_row, self.__new_column), castling #if legal, let board move piece
+                            else:
+                                self.__rect.center = self.__original_pos #illegal move so return piece to position before user moved it
                         
                     else:
                         not_on_a_square += 1
