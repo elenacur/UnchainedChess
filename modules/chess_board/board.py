@@ -6,6 +6,7 @@ from modules.chess_board.pieces.rook import Rook
 from modules.chess_board.pieces.bishop import Bishop
 from modules.chess_board.pieces.knight import Knight
 from modules.chess_board.pieces.pawn import Pawn
+from modules.notation.notation import Notation
 
 class Board():
 
@@ -33,6 +34,7 @@ class Board():
         self.__white_king_pos = None
         self.__black_king_pos = None
         self.__free_mode = False
+        self.__notation = Notation()
 
         #putting Square objects in the board array, alternating black and white
         white = True
@@ -80,6 +82,10 @@ class Board():
     def get_free_mode(self):
         return self.__free_mode
     
+    def get_notation(self):
+        return self.__notation
+
+    
     #setters
     def set_board(self, p_board):
         self.__board = p_board
@@ -113,6 +119,9 @@ class Board():
 
     def set_free_mode(self, p_free_mode):
         self.__free_mode = p_free_mode
+
+    def set_notation(self, p_notation):
+        self.__notation = p_notation
 
     #other methods
     def reset_board(self): #filling pieces array with Piece objects in order of chess starting position
@@ -173,8 +182,10 @@ class Board():
                     if returned_values != None:
                         new_row, new_column = returned_values
 
+                        old_column = piece.get_column() #for recording notation
+
                         #updating piece that was moved by user
-                        captured_piece = self.__pieces[new_row][new_column]
+                        captured_piece = self.__pieces[new_row][new_column]                        
                         self.set_pieces(None, piece.get_row(), piece.get_column())
                         piece.set_row(new_row)
                         piece.set_column(new_column)
@@ -186,11 +197,18 @@ class Board():
                             piece.set_has_moved(True)
                         
                         #checking if a pawn has been promoted
+                        choice = None
                         if piece.get_name() == "pawn":
                             if (piece.get_colour() == "white" and new_row == 0) or (piece.get_colour() == "black" and new_row == 7):
                                 piece.set_can_promote(True)
                                 choice = piece.promote()
                                 self.promote_pawn(piece, choice)
+                        
+                        #updating move notation
+                        if self.__free_mode == False:
+                            new_move = self.get_move_notation(piece, old_column, new_row, new_column, captured_piece, choice)
+                            self.__notation.record_move(new_move, self.__whites_turn)
+                            print(self.__notation.get_notation_text())  #printing notation for testing
 
 
                         self.__whites_turn = not self.__whites_turn #other player's turn now
@@ -254,6 +272,32 @@ class Board():
             new_piece = Knight(self, colour, False, row, column, size) 
 
         self.set_pieces(new_piece, row, column)
+
+    #putting the move just played into notation form
+    def get_move_notation(self, piece, old_column, new_row, new_column, captured_piece, promotion_choice):
+        
+        #putting new square into chess notation format
+        columns = ['a','b','c','d','e','f','g','h']
+        rows = ['8','7','6','5','4','3','2','1']
+        new_square = columns[new_column] + rows[new_row]
+
+        #getting letter of piece being moved
+        name_map = {"pawn": "", "knight": "N", "bishop": "B", "rook": "R", "queen": "Q", "king": "K"}
+        move = name_map[piece.get_name()] 
+
+        #adding an x if a piece is being taken
+        if captured_piece != None:
+            if piece.get_name() == "pawn": #pawns need their original column before an x
+                move += columns[old_column]
+            move += "x"
+            
+        move += new_square
+
+        #promotion notation
+        if promotion_choice != None:
+            move = move + "=" + name_map[promotion_choice]
+
+        return move
 
 
     

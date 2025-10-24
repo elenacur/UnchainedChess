@@ -33,6 +33,7 @@ while run == True: #game loop
   board.draw_whole_board(screen)
   board.draw_all_pieces(screen)
   board.draw_points(screen, default_text)
+  
 
   #event handler
   for event in pygame.event.get():
