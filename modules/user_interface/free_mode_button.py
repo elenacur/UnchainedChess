@@ -20,6 +20,8 @@ class FreeModeButton(Button):
             if board.get_free_mode() == True:
                 board.set_free_mode(False) #if free mode was on, turn it off
                 self.set_image(pygame.image.load("assets/button_images/red-free-mode-button.png"))
+                board.reset_to_latest_position() #NEW
+
             else:
                 board.set_free_mode(True) #if free mode was off, turn it on
                 self.set_image(pygame.image.load("assets/button_images/green-free-mode-button.png"))

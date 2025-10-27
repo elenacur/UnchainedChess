@@ -7,6 +7,7 @@ from modules.chess_board.pieces.bishop import Bishop
 from modules.chess_board.pieces.knight import Knight
 from modules.chess_board.pieces.pawn import Pawn
 from modules.notation.notation import Notation
+from modules.chess_board.pieces.parent_piece import clone_board
 
 class Board():
 
@@ -35,6 +36,8 @@ class Board():
         self.__black_king_pos = None
         self.__free_mode = False
         self.__notation = Notation()
+        self.__past_positions = [] #list of copies of past board positions
+        self.__current_position_index = -1 #track where we are in the notation
 
         #putting Square objects in the board array, alternating black and white
         white = True
@@ -160,6 +163,9 @@ class Board():
         self.__black_king_pos = [0, 4]
         self.__pieces[7][4] = King(self, "white", False, 7, 4, 84)
         self.__white_king_pos = [7, 4]
+
+        self.reset_past_positions() #resets past positions
+
     
     def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
         for i in self.__board:
@@ -204,14 +210,17 @@ class Board():
                                 choice = piece.promote()
                                 self.promote_pawn(piece, choice)
                         
-                        #updating move notation
+                        
                         if self.__free_mode == False:
+
+                            self.save_position() #store board after every move done when free mode isn't on
+
+                            #updating move notation
                             new_move = self.get_move_notation(piece, old_column, new_row, new_column, captured_piece, choice)
                             self.__notation.record_move(new_move, self.__whites_turn)
-                            print(self.__notation.get_notation_text())  #printing notation for testing
+                            print(self.__notation.get_notation_text()) #printing notation for testing
 
-
-                        self.__whites_turn = not self.__whites_turn #other player's turn now
+                            self.__whites_turn = not self.__whites_turn #other player's turn now
 
                         #updating rook if castling is occurring
                         if castling[0] != None:
@@ -299,6 +308,106 @@ class Board():
 
         return move
 
+    #resetting past positions
+    def reset_past_positions(self):
+        self.__past_positions = []
+        self.__current_position_index = -1
+        self.save_position()  #save the starting position
+
+    #cloning the current board state and saving it in past_positions
+    def save_position(self):
+        cloned_pieces = clone_board(self.__pieces) #clones baord
+
+        #if user goes back in time and makes a new move, get rid of future positions
+        if self.__current_position_index < len(self.__past_positions) - 1:
+            self.__past_positions = self.__past_positions[:self.__current_position_index + 1]
+
+            #also get rid of future text notation 
+            move_index = self.__current_position_index // 2 #finds the i of moves[i][j]
+            notation_moves = self.__notation.get_moves()
+
+            if self.__current_position_index % 2 == 1: #if user playing a black move
+                if move_index < len(notation_moves):
+                    self.__notation.set_moves(notation_moves[:move_index + 1]) #get rid of future move pairs
+                    if len(self.__notation.get_moves()) > 0:
+                        self.__notation.get_moves()[-1][1] = "" #get rid of black move user wants to replace
+
+            else: #if user playing a white move
+                if move_index < len(notation_moves):
+                    self.__notation.set_moves(notation_moves[:move_index]) #get rid of all future move pairs
+
+        
+        #adding copy of current board state to past_positions list and updating index
+        self.__past_positions.append(cloned_pieces)
+        self.__current_position_index += 1
+
+
+    #position on board goes back one move of notation
+    def go_back_one_move(self):
+        if self.__current_position_index > 0: #validates there is a position before current one
+            self.__current_position_index -= 1
+
+            #restoring saved position
+            cloned = self.__past_positions[self.__current_position_index]
+            self.__pieces = clone_board(cloned)
+
+            #redoing all pieces' board references
+            for row in self.__pieces:
+                for piece in row:
+                    if piece:
+                        piece.set_board(self)
+
+            #updating whose move it was in past/future position
+            if self.__current_position_index % 2 == 0:
+                self.__whites_turn = True
+            else:
+                self.__whites_turn = False
+
+        #for testing
+            print("Moved back to position " + str(self.__current_position_index))
+        else:
+            print("Already at the first position.")
+
+    #position on board goes forward one move of notation
+    def go_forward_one_move(self):
+        if self.__current_position_index < len(self.__past_positions) - 1: #validates there is a position after current one
+            self.__current_position_index += 1
+
+            #restoring saved position
+            cloned = self.__past_positions[self.__current_position_index]
+            self.__pieces = clone_board(cloned)
+
+            #redoing all pieces' board references
+            for row in self.__pieces:
+                for piece in row:
+                    if piece:
+                        piece.set_board(self)
+            
+            #updating whose move it was in past/future position
+            if self.__current_position_index % 2 == 0:
+                self.__whites_turn = True
+            else:
+                self.__whites_turn = False
+
+        #for testing
+            print("Moved forward to position " + str(self.__current_position_index))
+        else:
+            print("Already at the latest position.")
+
+    #position on board goes to most recent non-free mode one when user exits free mode
+    def reset_to_latest_position(self):
+        if len(self.__past_positions) > 0: #validation
+            latest_position = self.__past_positions[-1] #accessing last element in list of positions
+            self.__pieces = clone_board(latest_position) #setting board to be latest position
+
+            #redoing all pieces' board references
+            for row in self.__pieces:
+                for piece in row:
+                    if piece:
+                        piece.set_board(self)
+
+            self.__current_position_index = len(self.__past_positions) - 1 #resetting indexing
+            print("Returned to latest position.") #for testing
 
     
 

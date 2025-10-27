@@ -72,6 +72,9 @@ class Piece():
     #setters
     def set_name(self, p_name):
         self.__name = p_name
+    
+    def set_board(self, p_board):
+        self.__board = p_board
 
     def set_colour(self, p_colour):
         self.__colour = p_colour
