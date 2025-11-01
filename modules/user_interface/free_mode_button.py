@@ -20,11 +20,13 @@ class FreeModeButton(Button):
             if board.get_free_mode() == True:
                 board.set_free_mode(False) #if free mode was on, turn it off
                 self.set_image(pygame.image.load("assets/button_images/red-free-mode-button.png"))
-                board.reset_to_latest_position() #NEW
+                board.reset_to_latest_position() #makes position go back to latest position in game
+                print("Free mode turned off") #for testing
 
             else:
                 board.set_free_mode(True) #if free mode was off, turn it on
                 self.set_image(pygame.image.load("assets/button_images/green-free-mode-button.png"))
+                print("Free mode turned on") #for testing
 
         #resetting button
         if pygame.mouse.get_pressed()[0] == False:

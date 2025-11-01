@@ -7,6 +7,7 @@ from modules.chess_board.pieces.bishop import Bishop
 from modules.chess_board.pieces.knight import Knight
 from modules.chess_board.pieces.pawn import Pawn
 from modules.notation.notation import Notation
+from modules.notation.stack import Stack
 from modules.chess_board.pieces.parent_piece import clone_board
 
 class Board():
@@ -36,8 +37,9 @@ class Board():
         self.__black_king_pos = None
         self.__free_mode = False
         self.__notation = Notation()
-        self.__past_positions = [] #list of copies of past board positions
-        self.__current_position_index = -1 #track where we are in the notation
+        self.__undo_stack = Stack()   # stores past positions + current one
+        self.__redo_stack = Stack()   # stores undone positions
+        self.__current_position_index = 0
 
         #putting Square objects in the board array, alternating black and white
         white = True
@@ -212,13 +214,33 @@ class Board():
                         
                         
                         if self.__free_mode == False:
+                            
 
                             self.save_position() #store board after every move done when free mode isn't on
+
+                            #remove future text notation user may be rewriting
+                            current_moves = self.__notation.get_moves()
+                            move_index = self.__current_position_index // 2
+                            
+                            if self.__current_position_index % 2 == 1: #if user is playing a black move
+                                if move_index < len(current_moves):
+                                    self.__notation.set_moves(current_moves[:move_index + 1]) #get rid of future move pairs
+
+                                    if len(self.__notation.get_moves()) > 0:
+                                        new_moves = self.__notation.get_moves()
+                                        new_moves[-1][1] = "" #get rid of black move user wants to replace
+                                        self.__notation.set_moves(new_moves) 
+
+                            else: #if user playing a white move
+                                self.__notation.set_moves(current_moves[:move_index]) #get rid of all future move pairs
+
 
                             #updating move notation
                             new_move = self.get_move_notation(piece, old_column, new_row, new_column, captured_piece, choice)
                             self.__notation.record_move(new_move, self.__whites_turn)
                             print(self.__notation.get_notation_text()) #printing notation for testing
+
+                            self.__current_position_index += 1 #updating move we are on
 
                             self.__whites_turn = not self.__whites_turn #other player's turn now
 
@@ -305,109 +327,121 @@ class Board():
         #promotion notation
         if promotion_choice != None:
             move = move + "=" + name_map[promotion_choice]
-
+        
+        #the piece puts king in check/checkmate notation
+        if piece.get_colour() == "white":
+            if piece.in_check("black", self.__pieces):
+                move += "+"
+        elif piece.get_colour() == "black":
+            if piece.in_check("white", self.__pieces):
+                 move += "+"
         return move
 
     #resetting past positions
     def reset_past_positions(self):
-        self.__past_positions = []
-        self.__current_position_index = -1
-        self.save_position()  #save the starting position
 
-    #cloning the current board state and saving it in past_positions
+        #clearing stacks/instantiating them
+        self.__undo_stack = Stack()
+        self.__redo_stack = Stack()
+
+        self.__undo_stack.push(clone_board(self.__pieces)) #save starting position
+
+        self.__current_position_index = 0 #updating move we are on
+
+    #cloning the current board state and adding it to the undo stack
     def save_position(self):
         cloned_pieces = clone_board(self.__pieces) #clones baord
 
-        #if user goes back in time and makes a new move, get rid of future positions
-        if self.__current_position_index < len(self.__past_positions) - 1:
-            self.__past_positions = self.__past_positions[:self.__current_position_index + 1]
+        #if a new move is made, clear the redo stack (can't redo after a new move)
+        self.__redo_stack = Stack() #instantiates a new, empty object
 
-            #also get rid of future text notation 
-            move_index = self.__current_position_index // 2 #finds the i of moves[i][j]
-            notation_moves = self.__notation.get_moves()
-
-            if self.__current_position_index % 2 == 1: #if user playing a black move
-                if move_index < len(notation_moves):
-                    self.__notation.set_moves(notation_moves[:move_index + 1]) #get rid of future move pairs
-                    if len(self.__notation.get_moves()) > 0:
-                        self.__notation.get_moves()[-1][1] = "" #get rid of black move user wants to replace
-
-            else: #if user playing a white move
-                if move_index < len(notation_moves):
-                    self.__notation.set_moves(notation_moves[:move_index]) #get rid of all future move pairs
-
-        
-        #adding copy of current board state to past_positions list and updating index
-        self.__past_positions.append(cloned_pieces)
-        self.__current_position_index += 1
+        #add a copy of the new board position onto the undo stack
+        self.__undo_stack.push(cloned_pieces)
 
 
     #position on board goes back one move of notation
     def go_back_one_move(self):
-        if self.__current_position_index > 0: #validates there is a position before current one
-            self.__current_position_index -= 1
+        if self.__undo_stack.size() > 1: #can't undo the starting position
 
-            #restoring saved position
-            cloned = self.__past_positions[self.__current_position_index]
-            self.__pieces = clone_board(cloned)
+            current_position = self.__undo_stack.pop() #pop current position from undo stack
 
-            #redoing all pieces' board references
-            for row in self.__pieces:
-                for piece in row:
-                    if piece:
-                        piece.set_board(self)
+            if current_position != None:
+                self.__redo_stack.push(clone_board(current_position)) #put current position on redo stack
+            
+                new_position = self.__undo_stack.peek()
 
-            #updating whose move it was in past/future position
-            if self.__current_position_index % 2 == 0:
-                self.__whites_turn = True
-            else:
-                self.__whites_turn = False
+                if new_position != None:
+                    self.__pieces = clone_board(new_position) #board position is new top of undo stack
 
-        #for testing
-            print("Moved back to position " + str(self.__current_position_index))
+                    #update whose move it is
+                    if self.__whites_turn == True:
+                        self.__whites_turn = False
+                    else:
+                        self.__whites_turn = True
+
+                    #attaching board back to pieces
+                    for row in self.__pieces:
+                        for piece in row:
+                            if piece != None:
+                                piece.set_board(self)
+
+                    self.__current_position_index -= 1 #updating move we are on
+
+                    print("Moved back one position.") #for testing
+
         else:
-            print("Already at the first position.")
+            print("Already at the first position.") #for testing
 
     #position on board goes forward one move of notation
     def go_forward_one_move(self):
-        if self.__current_position_index < len(self.__past_positions) - 1: #validates there is a position after current one
-            self.__current_position_index += 1
 
-            #restoring saved position
-            cloned = self.__past_positions[self.__current_position_index]
-            self.__pieces = clone_board(cloned)
+        if self.__redo_stack.is_empty() == False: #can't redo a move when no moves have been made
 
-            #redoing all pieces' board references
-            for row in self.__pieces:
-                for piece in row:
-                    if piece:
-                        piece.set_board(self)
+            new_position = self.__redo_stack.pop() #remove new position from redo stack
+
+            if new_position != None:
+                self.__undo_stack.push(clone_board(new_position)) #put new position on undo stack
             
-            #updating whose move it was in past/future position
-            if self.__current_position_index % 2 == 0:
-                self.__whites_turn = True
-            else:
-                self.__whites_turn = False
+                new_position = self.__undo_stack.peek()
 
-        #for testing
-            print("Moved forward to position " + str(self.__current_position_index))
+                if new_position != None:
+                    self.__pieces = clone_board(new_position) #set new position to be one on top of undo
+
+                    #update whose move it is
+                    if self.__whites_turn == True:
+                        self.__whites_turn = False
+                    else:
+                        self.__whites_turn = True
+
+                    #attaching board back to pieces
+                    for row in self.__pieces:
+                        for piece in row:
+                            if piece != None:
+                                piece.set_board(self)
+                    
+                    self.__current_position_index += 1 #updating move we are on
+
+                    print("Move forward one position.") #for testing
+
         else:
-            print("Already at the latest position.")
+            print("Already at the latest position.") #for testing
 
     #position on board goes to most recent non-free mode one when user exits free mode
     def reset_to_latest_position(self):
-        if len(self.__past_positions) > 0: #validation
-            latest_position = self.__past_positions[-1] #accessing last element in list of positions
-            self.__pieces = clone_board(latest_position) #setting board to be latest position
+        if self.__undo_stack.size() > 0: #validation
 
-            #redoing all pieces' board references
-            for row in self.__pieces:
-                for piece in row:
-                    if piece:
-                        piece.set_board(self)
+            latest_position = self.__undo_stack.peek() #checking undo stack for what latest position is
 
-            self.__current_position_index = len(self.__past_positions) - 1 #resetting indexing
-            print("Returned to latest position.") #for testing
+            if latest_position != None:
+                self.__pieces = clone_board(latest_position) #setting board to be latest position
+
+                #attaching board back to pieces
+                for row in self.__pieces:
+                    for piece in row:
+                        if piece != None:
+                            piece.set_board(self)
+
+                print("Returned to latest position.") #for testing
 
     
 

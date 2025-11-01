@@ -280,7 +280,7 @@ class Piece():
                 break
 
         if king_pos == None:
-            return False  #in case there's no king on the board
+            return False #in case there's no king on the board
 
         #seeing if an opponent piece can legally move to square king is on
         for list in pieces:
@@ -290,7 +290,7 @@ class Piece():
                         enemy_moves = piece.get_legal_moves(piece.get_colour(), pieces)
                         for i in enemy_moves:
                             if i == king_pos:
-                                return True #return true if it can
+                                return True #return true if king is in check
         return False
 
     #for making copies of Piece objects

@@ -32,6 +32,9 @@ class BackForwardButtons(Button):
     
                 if self.__name == "forward_button":
                     board.go_forward_one_move()
+            
+            else:
+                print("Cannot go back or forward when in free mode.") #for testing
 
         #resetting button
         if pygame.mouse.get_pressed()[0] == False:
