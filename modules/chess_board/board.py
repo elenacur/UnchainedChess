@@ -328,13 +328,30 @@ class Board():
         if promotion_choice != None:
             move = move + "=" + name_map[promotion_choice]
         
-        #the piece puts king in check/checkmate notation
+
+        #check, checkmate, stalemate and final result notation
+        #if piece moved was white
         if piece.get_colour() == "white":
-            if piece.in_check("black", self.__pieces):
-                move += "+"
-        elif piece.get_colour() == "black":
-            if piece.in_check("white", self.__pieces):
-                 move += "+"
+            situation = piece.checkmated_or_stalemated("black", self.__pieces)
+            if situation == "checkmate": #the piece checkmates the king, meaning white wins
+                move += "# 1-0"
+            elif situation == "stalemate": #the piece causes stalemate, meaning a draw
+                move += "½–½"
+            elif situation == "neither": 
+                if piece.in_check("black", self.__pieces): #the piece puts king in check notation
+                    move += "+"
+
+        #if piece moved was black
+        if piece.get_colour() == "black":
+            situation = piece.checkmated_or_stalemated("white", self.__pieces)
+            if situation == "checkmate": #the piece checkmates the king, meaning black wins
+                move += "# 0-1"
+            elif situation == "stalemate": #the piece causes stalemate, meaning a draw
+                move += "½–½"
+            elif situation == "neither":
+                if piece.in_check("white", self.__pieces): #the piece puts king in check notation
+                    move += "+"
+
         return move
 
     #resetting past positions

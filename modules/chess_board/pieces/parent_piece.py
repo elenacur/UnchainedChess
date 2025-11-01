@@ -293,6 +293,37 @@ class Piece():
                                 return True #return true if king is in check
         return False
 
+    def checkmated_or_stalemated(self, king_colour, pieces):
+        king_in_check = self.in_check(king_colour, pieces)
+        #iterating through all pieces
+        for i in range(0, 8):
+            for j in range(0, 8):
+                piece = pieces[i][j]
+
+                #checking if any of pieces on king's side can make a legal move
+                if piece != None and piece.get_colour() == king_colour:
+                    legal_moves = piece.get_legal_moves(king_colour, pieces)
+
+                    #if legal_moves is empty, this won't happen. If stalemate, it may only happen for king.  
+                    for move in legal_moves: 
+                        #simulate the move on a cloned board
+                        pieces_copy = clone_board(pieces)
+                        pieces_copy[move[0]][move[1]] = pieces_copy[i][j]
+                        pieces_copy[i][j] = None
+                        pieces_copy[move[0]][move[1]].set_row(move[0])
+                        pieces_copy[move[0]][move[1]].set_column(move[1])
+
+                        #if the king is not in check after this move, then it's not checkmate/stalemate
+                        if pieces_copy[move[0]][move[1]].in_check(king_colour, pieces_copy) == False:
+                            return "neither"
+
+        #returning checkmate/stalemate if no other moves mean king is not in check
+        if king_in_check:
+            return "checkmate"
+        else:
+            return "stalemate"
+
+
     #for making copies of Piece objects
     def clone(self):  
         the_class = self.__class__
