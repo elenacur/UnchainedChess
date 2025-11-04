@@ -236,7 +236,7 @@ class Board():
 
 
                             #updating move notation
-                            new_move = self.get_move_notation(piece, old_column, new_row, new_column, captured_piece, choice)
+                            new_move = self.get_move_notation(piece, old_column, new_row, new_column, captured_piece, choice, castling)
                             self.__notation.record_move(new_move, self.__whites_turn)
                             print(self.__notation.get_notation_text()) #printing notation for testing
 
@@ -305,29 +305,37 @@ class Board():
         self.set_pieces(new_piece, row, column)
 
     #putting the move just played into notation form
-    def get_move_notation(self, piece, old_column, new_row, new_column, captured_piece, promotion_choice):
-        
-        #putting new square into chess notation format
-        columns = ['a','b','c','d','e','f','g','h']
-        rows = ['8','7','6','5','4','3','2','1']
-        new_square = columns[new_column] + rows[new_row]
+    def get_move_notation(self, piece, old_column, new_row, new_column, captured_piece, promotion_choice, castling):
 
-        #getting letter of piece being moved
-        name_map = {"pawn": "", "knight": "N", "bishop": "B", "rook": "R", "queen": "Q", "king": "K"}
-        move = name_map[piece.get_name()] 
+        #if castling, use unique castling notation
+        if castling[0] != None:
+            if castling[0] == "queen_side":
+                move = "0-0-0"
+            elif castling[0] == "king_side":
+                move = "0-0"
 
-        #adding an x if a piece is being taken
-        if captured_piece != None:
-            if piece.get_name() == "pawn": #pawns need their original column before an x
-                move += columns[old_column]
-            move += "x"
-            
-        move += new_square
+        #if not castling, use normal notation
+        else:
+            #putting new square into chess notation format
+            columns = ['a','b','c','d','e','f','g','h']
+            rows = ['8','7','6','5','4','3','2','1']
+            new_square = columns[new_column] + rows[new_row]
 
-        #promotion notation
-        if promotion_choice != None:
-            move = move + "=" + name_map[promotion_choice]
-        
+            #getting letter of piece being moved
+            name_map = {"pawn": "", "knight": "N", "bishop": "B", "rook": "R", "queen": "Q", "king": "K"}
+            move = name_map[piece.get_name()] 
+
+            #adding an x if a piece is being taken
+            if captured_piece != None:
+                if piece.get_name() == "pawn": #pawns need their original column before an x
+                    move += columns[old_column]
+                move += "x"
+                
+            move += new_square
+
+            #promotion notation
+            if promotion_choice != None:
+                move = move + "=" + name_map[promotion_choice]
 
         #check, checkmate, stalemate and final result notation
         #if piece moved was white

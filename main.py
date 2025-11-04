@@ -3,6 +3,7 @@ import pygame
 from modules.chess_board.board import Board
 from modules.user_interface.free_mode_button import FreeModeButton
 from modules.user_interface.back_forward_buttons import BackForwardButtons
+from modules.user_interface.notation_panel import NotationPanel
 
 pygame.init()
 
@@ -17,9 +18,11 @@ default_text = pygame.font.SysFont("Arial", 30)
 #instantiating objects
 board = Board(84, "", True, 0, False)
 board.reset_board()
-free_mode_button = FreeModeButton(1100, 350, 100, 100, None, pygame.image.load("assets/button_images/red-free-mode-button.png"))
-back_button = BackForwardButtons(1100, 500, 80, 80, None, pygame.image.load("assets/button_images/back-button.png"), "back_button")
-forward_button = BackForwardButtons(1200, 500, 80, 80, None, pygame.image.load("assets/button_images/forward-button.png"), "forward_button")
+free_mode_button = FreeModeButton(65, 350, 80, 80, None, pygame.image.load("assets/button_images/red-free-mode-button.png"))
+back_button = BackForwardButtons(20, 500, 80, 80, None, pygame.image.load("assets/button_images/back-button.png"), "back_button")
+forward_button = BackForwardButtons(110, 500, 80, 80, None, pygame.image.load("assets/button_images/forward-button.png"), "forward_button")
+notation_panel = NotationPanel(996, 70, 235, 672, default_text)
+
 
 run = True
 while run == True: #game loop
@@ -32,16 +35,19 @@ while run == True: #game loop
   back_button.draw(screen)
   forward_button.draw(screen)
 
-  #checking if user_interface objects are clicked
-  free_mode_button.check_if_clicked(board)
-  back_button.check_if_clicked(board)
-  forward_button.check_if_clicked(board)
-
   #drawing chess_board objects onto the screen
   board.draw_whole_board(screen)
   board.draw_all_pieces(screen)
   board.draw_points(screen, default_text)
 
+  #drawing notation panel onto screen
+  notation_panel.draw(screen, board.get_notation().get_moves()) 
+
+  #checking if user_interface objects are clicked or user wants to scroll down/up notation
+  free_mode_button.check_if_clicked(board)
+  back_button.check_if_clicked(board)
+  forward_button.check_if_clicked(board)
+  notation_panel.update_scroll(pygame.key.get_pressed())
 
   #event handler
   for event in pygame.event.get():
