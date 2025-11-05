@@ -199,8 +199,6 @@ class Board():
                         piece.set_column(new_column)
                         self.set_pieces(piece, new_row, new_column)
 
-                        self.update_points(captured_piece) #updates points
-
                         if piece.get_has_moved() == False: #piece has now moved so need to update this attribute
                             piece.set_has_moved(True)
                         
@@ -214,7 +212,8 @@ class Board():
                         
                         
                         if self.__free_mode == False:
-                            
+
+                            self.update_points(captured_piece) #updates points
 
                             self.save_position() #store board after every move done when free mode isn't on
 
@@ -267,8 +266,8 @@ class Board():
     def draw_points(self, screen, text):
         white_points_str = str(self.__white_points)
         black_points_str = str(self.__black_points)
-        screen.blit(text.render(white_points_str, True, "black"), (100, 100))
-        screen.blit(text.render(black_points_str, True, "black"), (50, 100))
+        screen.blit(text.render(white_points_str, True, "black"), (910, 685))
+        screen.blit(text.render(black_points_str, True, "black"), (910, 95))
 
     def castle(self, castling, new_column):
         self.set_pieces(None, castling[1].get_row(), castling[1].get_column())
@@ -468,5 +467,24 @@ class Board():
 
                 print("Returned to latest position.") #for testing
 
+    #creates a text file and saves the notation in PGN format there
+    def save_game(self):
+
+        #creating the unique name of the file
+        import datetime
+        datetime = datetime.datetime.now()
+
+        #not using %x or it the date is written in the american way
+        #%x and %X also generate characters that can't be in file names
+        date = datetime.strftime("%d") + "-" + datetime.strftime("%m") + "-" + datetime.strftime("%Y") + " "
+        time = datetime.strftime("%H") + "-" + datetime.strftime("%M") + "-" + datetime.strftime("%S")
+
+        file_name = "UnchainedChess Game " + date + time + ".txt"
+
+        #creating the text file and writing notation to it
+        file = open(file_name, "x")
+        file.write(self.__notation.get_notation_text())
+        file.close()
+               
     
 
