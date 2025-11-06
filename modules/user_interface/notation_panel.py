@@ -52,7 +52,7 @@ class NotationPanel:
     def draw(self, screen, moves):
 
         #drawing background and border
-        pygame.draw.rect(screen, (240, 240, 240), self.__rect)
+        pygame.draw.rect(screen, (201, 218, 248), self.__rect)
         pygame.draw.rect(screen, (0, 0, 0), self.__rect, 2)
 
         #get the lines, the height of each line and the total height of all the lines
