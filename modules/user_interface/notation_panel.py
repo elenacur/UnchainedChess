@@ -51,9 +51,10 @@ class NotationPanel:
     #draw the notation panel
     def draw(self, screen, moves):
 
-        #drawing background and border
+        #drawing background, border and title
         pygame.draw.rect(screen, (201, 218, 248), self.__rect)
         pygame.draw.rect(screen, (0, 0, 0), self.__rect, 2)
+        screen.blit(self.__font.render("notation", True, (0, 0, 0)), (self.__rect.x, self.__rect.y - self.__font.get_height() - 5))
 
         #get the lines, the height of each line and the total height of all the lines
         lines = self.format_notation(moves)
