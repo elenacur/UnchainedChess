@@ -1,4 +1,5 @@
 #imports
+import pygame
 from modules.chess_board.square import Square
 from modules.chess_board.pieces.king import King
 from modules.chess_board.pieces.queen import Queen
@@ -170,10 +171,29 @@ class Board():
 
     
     def draw_whole_board(self, screen): #draws every object in the board array i.e. the whole board
-        for i in self.__board:
-            for j in i:
-                j.draw_square(screen)
+
+        columns = ["a", "b", "c", "d", "e", "f", "g", "h"]
+        rows = ["8", "7", "6", "5", "4", "3", "2", "1"]
+
+        for i in range(0, 8):
+            for j in range(0, 8):
+
+                #drawing the board
+                square = self.__board[i][j]
+                square.draw_square(screen)
+
+                #drawing the coordinates
+                #letter coordinates
+                if i == 7: #on bottom row
+                    label = pygame.font.SysFont("Arial", 20).render(columns[j], True, (0, 0, 0))
+                    screen.blit(label, (square.get_x() + 1, square.get_y() + square.get_size() - 25))
+                
+                #number coordinates
+                if j == 0: #on left column
+                    label = pygame.font.SysFont("Arial", 20).render(rows[i], True, (0, 0, 0))
+                    screen.blit(label, (square.get_x() + 1, square.get_y() + 1))
     
+
     def draw_all_pieces(self, screen): #draws every object in the piece array
         for i in self.__pieces:
             for j in i:

@@ -47,7 +47,7 @@ while run == True: #game loop
 
   #drawing chess_board objects onto the screen
   board.draw_whole_board(screen)
-  board.draw_all_pieces(screen)
+  board.draw_all_pieces(screen)  
   board.draw_points(screen, default_text)
 
   #drawing notation panel onto screen
