@@ -43,7 +43,7 @@ class Square:
     def get_rect(self):
         return self.__rect
 
-    #setters
+    #setters- some attributes will never be changed so setters are unnecessary
     def set_colour(self, p_colour):
         self.__colour = p_colour
 

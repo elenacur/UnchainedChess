@@ -61,6 +61,9 @@ class Board():
     def get_pieces(self, row, column):
         return self.__pieces[row][column]
     
+    def get_square_size(self):
+        return self.__square_size
+    
     def get_fen(self):
         return self.__fen
     
@@ -91,6 +94,15 @@ class Board():
     def get_notation(self):
         return self.__notation
 
+    def get_undo_stack(self):
+        return self.__undo_stack
+
+    def get_redo_stack(self):
+        return self.__redo_stack
+
+    def get_current_position_index(self):
+        return self.__current_position_index
+
     
     #setters
     def set_board(self, p_board):
@@ -98,6 +110,9 @@ class Board():
 
     def set_pieces(self, new_piece, row, column):
         self.__pieces[row][column] = new_piece
+
+    def set_square_size(self, p_square_size):
+        self.__square_size = p_square_size
     
     def set_fen(self, p_fen):
         self.__fen = p_fen
@@ -128,6 +143,15 @@ class Board():
 
     def set_notation(self, p_notation):
         self.__notation = p_notation
+
+    def set_undo_stack(self, p_undo_stack):
+        self.__undo_stack = p_undo_stack
+
+    def set_redo_stack(self, p_redo_stack):
+        self.__redo_stack = p_redo_stack
+
+    def set_current_position_index(self, p_index):
+        self.__current_position_index = p_index
 
     #other methods
     def reset_board(self): #filling pieces array with Piece objects in order of chess starting position
