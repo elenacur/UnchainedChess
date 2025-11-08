@@ -1,5 +1,6 @@
 import pygame
 from modules.user_interface.button import Button
+from modules.save_game.save_game import save_game
 
 class SaveGameButton(Button):
     #constructor
@@ -17,7 +18,7 @@ class SaveGameButton(Button):
             self.set_clicked(True)
 
             if board.get_free_mode() == False:
-                board.save_game()
+                save_game(board.get_notation().get_notation_text())
             
             else:
                 print("Cannot save game when in free mode.") #for testing

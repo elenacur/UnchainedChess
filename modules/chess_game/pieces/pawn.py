@@ -1,6 +1,6 @@
 #imports
 import pygame
-from modules.chess_board.pieces.parent_piece import Piece
+from modules.chess_game.pieces.parent_piece import Piece
 from modules.user_interface.pop_up_box import PopUpBox
 
 #using inheritance of Piece

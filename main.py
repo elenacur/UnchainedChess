@@ -1,12 +1,12 @@
 #imports
 import pygame
-from modules.chess_board.board import Board
+from modules.chess_game.board.board import Board
 from modules.user_interface.free_mode_button import FreeModeButton
 from modules.user_interface.back_forward_buttons import BackForwardButtons
 from modules.user_interface.notation_panel import NotationPanel
 from modules.user_interface.save_game_button import SaveGameButton
 from modules.user_interface.instructions_button import InstructionsButton
-from modules.user_interface.instructions_menu import InstructionsMenu
+from modules.instructions.instructions_menu import InstructionsMenu
 
 pygame.init()
 

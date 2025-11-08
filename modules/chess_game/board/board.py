@@ -1,15 +1,15 @@
 #imports
 import pygame
-from modules.chess_board.square import Square
-from modules.chess_board.pieces.king import King
-from modules.chess_board.pieces.queen import Queen
-from modules.chess_board.pieces.rook import Rook
-from modules.chess_board.pieces.bishop import Bishop
-from modules.chess_board.pieces.knight import Knight
-from modules.chess_board.pieces.pawn import Pawn
+from modules.chess_game.board.square import Square
+from modules.chess_game.pieces.king import King
+from modules.chess_game.pieces.queen import Queen
+from modules.chess_game.pieces.rook import Rook
+from modules.chess_game.pieces.bishop import Bishop
+from modules.chess_game.pieces.knight import Knight
+from modules.chess_game.pieces.pawn import Pawn
 from modules.notation.notation import Notation
 from modules.notation.stack import Stack
-from modules.chess_board.pieces.parent_piece import clone_board
+from modules.chess_game.pieces.parent_piece import clone_board
 
 class Board():
 
@@ -487,24 +487,7 @@ class Board():
 
                 print("Returned to latest position.") #for testing
 
-    #creates a text file and saves the notation in PGN format there
-    def save_game(self):
-
-        #creating the unique name of the file
-        import datetime
-        datetime = datetime.datetime.now()
-
-        #not using %x or it the date is written in the american way
-        #%x and %X also generate characters that can't be in file names
-        date = datetime.strftime("%d") + "-" + datetime.strftime("%m") + "-" + datetime.strftime("%Y") + " "
-        time = datetime.strftime("%H") + "-" + datetime.strftime("%M") + "-" + datetime.strftime("%S")
-
-        file_name = "UnchainedChess Game " + date + time + ".txt"
-
-        #creating the text file and writing notation to it
-        file = open(file_name, "x")
-        file.write(self.__notation.get_notation_text())
-        file.close()
+    
                
     
 

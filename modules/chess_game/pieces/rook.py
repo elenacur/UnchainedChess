@@ -1,6 +1,6 @@
 #imports
 import pygame
-from modules.chess_board.pieces.parent_piece import Piece
+from modules.chess_game.pieces.parent_piece import Piece
 
 #using inheritance of Piece
 
