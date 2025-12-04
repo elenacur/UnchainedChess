@@ -307,12 +307,13 @@ class Board():
             else:
                 self.__white_points += taken_piece.get_value()
 
+    #displays players' points on the screen
     def draw_points(self, screen, text):
         white_points_str = str(self.__white_points)
         black_points_str = str(self.__black_points)
         screen.blit(text.render(white_points_str, True, "black"), (910, 685))
         screen.blit(text.render(black_points_str, True, "black"), (910, 95))
-
+        
     def castle(self, castling, new_column):
         self.set_pieces(None, castling[1].get_row(), castling[1].get_column())
 
