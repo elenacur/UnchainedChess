@@ -10,8 +10,6 @@ class King(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("king", board, colour, taken, row, column, size) #initialising parent class
-        self.__checked = False #for legal moves
-        self.__checkmated = False #for ending the game
         self.__can_move = False #for stalemates
         self.set_value(0) #kings do not have a value
 
@@ -23,21 +21,11 @@ class King(Piece):
         self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
 
     # getters
-    def get_checked(self):
-        return self.__checked
-
-    def get_checkmated(self):
-        return self.__checkmated
 
     def get_can_move(self):
         return self.__can_move
 
     # setters
-    def set_checked(self, p_checked):
-        self.__checked = p_checked
-
-    def set_checkmated(self, p_checkmated):
-        self.__checkmated = p_checkmated
 
     def set_can_move(self, p_can_move):
         self.__can_move = p_can_move
