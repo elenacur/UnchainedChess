@@ -34,8 +34,6 @@ class Board():
         self.__game_over = game_over
         self.__white_points = 0
         self.__black_points = 0
-        self.__white_king_pos = None
-        self.__black_king_pos = None
         self.__free_mode = False
         self.__notation = Notation()
         self.__undo_stack = Stack()   # stores past positions + current one
@@ -82,12 +80,6 @@ class Board():
     def get_black_points(self):
         return self.__black_points
     
-    def get_white_king_pos(self):
-        return self.__white_king_pos
-    
-    def get_black_king_pos(self):
-        return self.__black_king_pos
-    
     def get_free_mode(self):
         return self.__free_mode
     
@@ -131,12 +123,6 @@ class Board():
 
     def set_black_points(self, p_black_points):
         self.__black_points = p_black_points
-
-    def set_white_king_pos(self, p_white_king_pos):
-        self.__white_king_pos = p_white_king_pos
-
-    def set_black_king_pos(self, p_black_king_pos):
-        self.__black_king_pos = p_black_king_pos
 
     def set_free_mode(self, p_free_mode):
         self.__free_mode = p_free_mode
@@ -187,9 +173,8 @@ class Board():
 
         #kings
         self.__pieces[0][4] = King(self, "black", False, 0, 4, 84)
-        self.__black_king_pos = [0, 4]
         self.__pieces[7][4] = King(self, "white", False, 7, 4, 84)
-        self.__white_king_pos = [7, 4]
+
 
         self.reset_past_positions() #resets past positions
 
