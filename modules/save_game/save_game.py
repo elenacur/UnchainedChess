@@ -8,7 +8,7 @@ def save_game(notation_text):
     #not using %x or it the date is written in the american way
     #%x and %X also generate characters that can't be in file names
     date = datetime.strftime("%d") + "-" + datetime.strftime("%m") + "-" + datetime.strftime("%Y") + " "
-    time = datetime.strftime("%H") + "-" + datetime.strftime("%M") + "-" + datetime.strftime("%S")
+    time = datetime.strftime("%H") + "-" + datetime.strftime("%M") + "-" + datetime.strftime("%S") + "-" + datetime.strftime("%f")
 
     file_name = "UnchainedChess Game " + date + time + ".txt"
 
