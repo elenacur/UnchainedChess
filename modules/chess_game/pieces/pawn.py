@@ -11,8 +11,6 @@ class Pawn(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("pawn", board, colour, taken, row, column, size) #initialising parent class
-        self.__en_passant = False #for en passant
-        self.__can_promote = False #for promoting
         self.set_value(1)
 
         if self.get_colour() == "white": #assigning different images based on colour
@@ -23,18 +21,8 @@ class Pawn(Piece):
         self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
 
     #getters
-    def get_en_passant(self):
-        return self.__en_passant
-
-    def get_can_promote(self):
-        return self.__can_promote
     
     #setters
-    def set_en_passant(self, p_en_passant):
-        self.__en_passant = p_en_passant
-
-    def set_can_promote(self, p_can_promote):
-        self.__can_promote = p_can_promote
 
     #other methods
     def get_legal_moves(self, colour, pieces):

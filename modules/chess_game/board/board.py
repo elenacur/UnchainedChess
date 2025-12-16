@@ -14,7 +14,7 @@ from modules.chess_game.pieces.parent_piece import clone_board
 class Board():
 
     #constructor
-    def __init__(self, square_size, fen, whites_turn, num_of_moves, game_over):
+    def __init__(self, square_size, whites_turn):
         self.__board = [["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
                         ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], 
@@ -28,10 +28,7 @@ class Board():
                          [None, None, None, None, None, None, None, None], 
                          [None, None, None, None, None, None, None, None]] #2D array of Piece objects
         self.__square_size = square_size
-        self.__fen = fen
         self.__whites_turn = whites_turn
-        self.__num_of_moves = num_of_moves
-        self.__game_over = game_over
         self.__white_points = 0
         self.__black_points = 0
         self.__free_mode = False
@@ -62,17 +59,8 @@ class Board():
     def get_square_size(self):
         return self.__square_size
     
-    def get_fen(self):
-        return self.__fen
-    
     def get_whites_turn(self):
         return self.__whites_turn
-    
-    def get_num_of_moves(self):
-        return self.__num_of_moves
-    
-    def get_game_over(self):
-        return self.__game_over
     
     def get_white_points(self):
         return self.__white_points
@@ -105,18 +93,9 @@ class Board():
 
     def set_square_size(self, p_square_size):
         self.__square_size = p_square_size
-    
-    def set_fen(self, p_fen):
-        self.__fen = p_fen
 
     def set_whites_turn(self, p_whites_turn):
         self.__whites_turn = p_whites_turn
-    
-    def set_num_of_moves(self, p_num_of_moves):
-        self.__num_of_moves = p_num_of_moves
-    
-    def set_game_over(self, p_game_over):
-        self.__game_over = p_game_over
 
     def set_white_points(self, p_white_points):
         self.__white_points = p_white_points
@@ -235,7 +214,6 @@ class Board():
                         choice = None
                         if piece.get_name() == "pawn":
                             if (piece.get_colour() == "white" and new_row == 0) or (piece.get_colour() == "black" and new_row == 7):
-                                piece.set_can_promote(True)
                                 choice = piece.promote()
                                 self.promote_pawn(piece, choice)
                         
@@ -302,16 +280,18 @@ class Board():
     def castle(self, castling, new_column):
         self.set_pieces(None, castling[1].get_row(), castling[1].get_column())
 
+        
         if castling[0] == "king_side":
             new_rook_column = new_column - 1 #rook is on left of king
         elif castling[0] == "queen_side":
             new_rook_column = new_column + 1 #rook is on right of king
 
+        #moving rook to its new square
         castling[1].set_column(new_rook_column)
         castling[1].get_rect().center = self.__board[castling[1].get_row()][castling[1].get_column()].get_rect().center
         self.set_pieces(castling[1], castling[1].get_row(), new_rook_column)
 
-        if castling[1].get_has_moved() == False:
+        if castling[1].get_has_moved() == False: #updating attributes
             castling[1].set_has_moved(True)
     
     #replaces pawn with piece of user's choice

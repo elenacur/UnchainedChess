@@ -19,17 +19,17 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 default_text = pygame.font.SysFont("Arial", 30)
 
 #instantiating objects
-board = Board(84, "", True, 0, False)
+board = Board(84, True)
 board.reset_board()
-free_mode_button = FreeModeButton(110, 300, 80, 80, None, pygame.image.load("assets/button_images/red-free-mode-button.png"))
-back_button = BackForwardButtons(20, 400, 80, 80, None, pygame.image.load("assets/button_images/back-button.png"), "back_button")
-forward_button = BackForwardButtons(110, 400, 80, 80, None, pygame.image.load("assets/button_images/forward-button.png"), "forward_button")
+free_mode_button = FreeModeButton(110, 300, 80, 80, pygame.image.load("assets/button_images/red-free-mode-button.png"))
+back_button = BackForwardButtons(20, 400, 80, 80, pygame.image.load("assets/button_images/back-button.png"), "back_button")
+forward_button = BackForwardButtons(110, 400, 80, 80, pygame.image.load("assets/button_images/forward-button.png"), "forward_button")
 notation_panel = NotationPanel(996, 70, 235, 672, default_text)
-save_game_button = SaveGameButton(20, 300, 80, 80, None, pygame.image.load("assets/button_images/save-game-button.png"))
-instructions_button = InstructionsButton(1254, 666, 80, 80, None, pygame.image.load("assets/button_images/instructions-button.png"))
-instructions_menu = InstructionsMenu(0, 0, 1344, 756, None, pygame.image.load("assets/instructions-menu.png"))
+save_game_button = SaveGameButton(20, 300, 80, 80, pygame.image.load("assets/button_images/save-game-button.png"))
+instructions_button = InstructionsButton(1254, 666, 80, 80, pygame.image.load("assets/button_images/instructions-button.png"))
+instructions_menu = InstructionsMenu(0, 0, 1344, 756, pygame.image.load("assets/instructions-menu.png"))
 
-show_instructions = False
+show_instructions = False #for showing instructions menu
 
 run = True
 while run == True: #game loop
@@ -82,9 +82,10 @@ while run == True: #game loop
     if event.type == pygame.QUIT: #close window when user exits
       run = False
 
-  pygame.display.update()  
+  pygame.display.update() #updating the whole window
 
-pygame.quit()
+pygame.quit() #deactivates the pygame library after exiting game loop
 
-#board.print_pieces() #prints the current board position in terminal
+
+#board.print_pieces() #prints the current board position in terminal- for testing
 

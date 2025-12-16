@@ -4,8 +4,8 @@ from modules.user_interface.button import Button
 class BackForwardButtons(Button):
 
     #constructor
-    def __init__(self, x, y, width, height, colour, image, name):
-        super().__init__(x, y, width, height, colour, image)
+    def __init__(self, x, y, width, height, image, name):
+        super().__init__(x, y, width, height, image)
 
         self.__name = name #so I can distinguish back buttons and forward buttons
 

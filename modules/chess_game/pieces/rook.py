@@ -26,6 +26,3 @@ class Rook(Piece):
     #other methods
     def get_legal_moves(self, colour, pieces):
         return self.get_legal_rook_moves(colour, pieces)
-
-    def castle(self):
-        None

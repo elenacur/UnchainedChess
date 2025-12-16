@@ -10,7 +10,7 @@ class King(Piece):
     #constructor
     def __init__(self, board, colour, taken, row, column, size):
         super().__init__("king", board, colour, taken, row, column, size) #initialising parent class
-        self.__can_move = False #for stalemates
+  
         self.set_value(0) #kings do not have a value
 
         if self.get_colour() == "white": #assigning different images based on colour
@@ -22,13 +22,7 @@ class King(Piece):
 
     # getters
 
-    def get_can_move(self):
-        return self.__can_move
-
     # setters
-
-    def set_can_move(self, p_can_move):
-        self.__can_move = p_can_move
 
     #other methods
     def get_legal_moves(self, colour, pieces):

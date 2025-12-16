@@ -4,15 +4,13 @@ import pygame
 class Button:
 
     #constructor
-    def __init__(self, x, y, width, height, colour, image):
+    def __init__(self, x, y, width, height, image):
 
         self.__x = x
         self.__y = y
         self.__width = width
         self.__height = height
-        self.__colour = colour
         self.__image = image
-
         self.__rect = pygame.Rect(x, y, width, height)
         self.__clicked = False
 
@@ -28,9 +26,6 @@ class Button:
 
     def get_height(self):
         return self.__height
-
-    def get_colour(self):
-        return self.__colour
 
     def get_image(self):
         return self.__image
@@ -57,9 +52,6 @@ class Button:
     def set_height(self, p_height):
         self.__height = p_height
         self.__rect.height = p_height #keep rect in sync
-
-    def set_colour(self, p_colour):
-        self.__colour = p_colour
 
     def set_image(self, p_image):
         self.__image = p_image

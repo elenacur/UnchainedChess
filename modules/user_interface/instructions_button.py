@@ -4,9 +4,9 @@ from modules.user_interface.button import Button
 
 class InstructionsButton(Button):
     #constructor
-    def __init__(self, x, y, width, height, colour, image):
+    def __init__(self, x, y, width, height, image):
         
-        super().__init__(x, y, width, height, colour, image)
+        super().__init__(x, y, width, height, image)
 
     
     def check_if_clicked(self):
