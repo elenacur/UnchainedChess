@@ -35,9 +35,28 @@ class Square:
     def get_rect(self):
         return self.__rect
 
-    #setters- some attributes will never be changed so setters are unnecessary
+    #setters
+    def set_row(self, p_row):
+        self.__row = p_row
+    
+    def set_column(self, p_column):
+        self.__column = p_column
+
+    def set_size(self, p_size):
+        self.__size = p_size
+
     def set_colour(self, p_colour):
         self.__colour = p_colour
+
+    def set_x(self, p_x):
+        self.__x = p_x
+
+    def set_y(self, p_y):
+        self.__y = p_y
+    
+    def set_rect(self, p_rect):
+        self.__rect = p_rect
+
 
     #other methods
     def draw_square(self, screen): #draws one square

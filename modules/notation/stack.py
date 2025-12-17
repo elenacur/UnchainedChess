@@ -1,7 +1,22 @@
 class Stack:
     def __init__(self, capacity=None):
-        self.__items = [] #list fo the items in the stack
+        self.__items = [] #list of the items in the stack
         self.__capacity = capacity
+
+    #getters
+    def get_items(self):
+        return self.__items
+    
+    def get_capacity(self):
+        return self.__capacity
+
+    #setters
+    def set_items(self, p_items):
+        self.__items = p_items
+
+    def set_capacity(self, p_capacity):
+        self.__capacity = p_capacity
+
 
     #methods
 

@@ -1,3 +1,4 @@
+#imports
 import pygame
 from modules.user_interface.button import Button
 
@@ -17,7 +18,7 @@ class BackForwardButtons(Button):
     def set_name(self, p_name):
         self.__name = p_name
 
-
+    #checks if user clicks on button and carries out appropriate response
     def check_if_clicked(self, board):
         pos = pygame.mouse.get_pos()
 

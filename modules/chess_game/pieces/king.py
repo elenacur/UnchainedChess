@@ -20,9 +20,9 @@ class King(Piece):
 
         self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
 
-    # getters
+    #getters- N/A
 
-    # setters
+    #setters- N/A
 
     #other methods
     def get_legal_moves(self, colour, pieces):
@@ -40,6 +40,7 @@ class King(Piece):
                     #adding this move to the legal_moves list if it's in range and isn't moving to a piece of the same colour
                     legal_moves.append([legal_row, legal_column])
 
+        #castling
         if self.get_has_moved() == False:
             #making sure no pieces are blocking the castling
             if 0 <= self.get_column() - 3 <= 7 and 0 <= self.get_column() + 2 <= 7:

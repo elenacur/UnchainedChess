@@ -1,4 +1,4 @@
-
+#imports
 import pygame
 from modules.user_interface.button import Button
 
@@ -9,6 +9,7 @@ class FreeModeButton(Button):
         super().__init__(x, y, width, height, image)
 
 
+    #checks if user clicks on button and carries out appropriate response
     def check_if_clicked(self, board):
         pos = pygame.mouse.get_pos()
 

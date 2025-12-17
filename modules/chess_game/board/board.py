@@ -33,8 +33,8 @@ class Board():
         self.__black_points = 0
         self.__free_mode = False
         self.__notation = Notation()
-        self.__undo_stack = Stack()   # stores past positions + current one
-        self.__redo_stack = Stack()   # stores undone positions
+        self.__undo_stack = Stack() #stores past positions + current one
+        self.__redo_stack = Stack() #stores undone positions
         self.__current_position_index = 0
 
         #putting Square objects in the board array, alternating black and white
@@ -277,6 +277,7 @@ class Board():
         screen.blit(text.render(white_points_str, True, "black"), (910, 685))
         screen.blit(text.render(black_points_str, True, "black"), (910, 95))
         
+    #updating rook's position after king moves for castling
     def castle(self, castling, new_column):
         self.set_pieces(None, castling[1].get_row(), castling[1].get_column())
 

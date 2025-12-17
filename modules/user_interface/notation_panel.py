@@ -1,4 +1,4 @@
-
+#imports
 import pygame
 
 class NotationPanel:
@@ -38,8 +38,23 @@ class NotationPanel:
         return self.__scroll_speed
 
     #setters
+    def set_x(self, p_x):
+        self.__x = p_x
+
+    def set_y(self, p_y):
+        self.__y = p_y
+
+    def set_width(self, p_width):
+        self.__width = p_width
+
+    def set_height(self, p_height):
+        self.__height = p_height
+
     def set_font(self, p_font):
         self.__font = p_font
+
+    def set_rect(self, p_rect):
+        self.__rect = p_rect
 
     def set_scroll_offset(self, p_scroll_offset):
         self.__scroll_offset = p_scroll_offset

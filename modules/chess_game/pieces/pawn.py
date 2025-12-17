@@ -20,9 +20,9 @@ class Pawn(Piece):
 
         self.set_image(pygame.transform.scale_by(self.get_image(), (self.get_size()/105))) #scaling the image
 
-    #getters
+    #getters- N/A
     
-    #setters
+    #setters- N/A
 
     #other methods
     def get_legal_moves(self, colour, pieces):

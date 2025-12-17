@@ -117,10 +117,11 @@ class Piece():
 
 
     #other methods
-    def get_legal_moves(self, colour, pieces):
+    def get_legal_moves(self, colour, pieces): #all subclasses overwrite this
         legal_moves = []
         return legal_moves
     
+    #getting legal rook moves
     def get_legal_rook_moves(self, colour, pieces):
         legal_moves = []    
 
@@ -192,6 +193,7 @@ class Piece():
 
         return legal_moves
     
+    #getting legal bishop moves
     def get_legal_bishop_moves(self, colour, pieces):
         legal_moves = []
 
@@ -262,10 +264,8 @@ class Piece():
                     no_blockages = False
 
         return legal_moves
-    
-    def remove(self):
-        None
 
+    #returns True if king is in check
     def in_check(self, king_colour, pieces):
         #finding position of the king
         king_pos = None
@@ -293,6 +293,7 @@ class Piece():
                                 return True #return true if king is in check
         return False
 
+    #returns if it's checkmate, stalemate or neither
     def checkmated_or_stalemated(self, king_colour, pieces):
         king_in_check = self.in_check(king_colour, pieces)
         #iterating through all pieces
@@ -426,6 +427,7 @@ class Piece():
         else:
             return False, [None, None] #illegal move so return False
 
+    #draws piece on GUI
     def draw_piece(self, screen):
         #create a rect that is the image's size and position, put this rect at the centre of self.__rect
         screen.blit(self.__image, self.__image.get_rect(center=self.__rect.center)) #blit image and rect

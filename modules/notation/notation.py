@@ -18,7 +18,7 @@ class Notation:
             self.__moves[-1][1] = move #in the last pair, accessing the second element, store move there
         
 
-    #returns notation in a text format
+    #returns notation in a text/PGN format
     def get_notation_text(self):
         notation_text = ""
 
